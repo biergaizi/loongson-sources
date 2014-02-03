@@ -1,0 +1,60 @@
+#
+# MIPS Platform Specific Drivers
+#
+
+menuconfig MIPS_PLATFORM_DEVICES
+	bool "MIPS Platform Specific Device Drivers"
+	default y
+	help
+	  Say Y here to get to see options for device drivers of various
+	  MIPS platforms, including vendor-specific netbook/laptop/pc extension
+	  drivers.  This option alone does not add any kernel code.
+
+	  If you say N, all options in this submenu will be skipped and disabled.
+
+if MIPS_PLATFORM_DEVICES
+
+config LEMOTE_YEELOONG2F
+	tristate "Lemote YeeLoong Laptop"
+	depends on LEMOTE_MACH2F
+	select BACKLIGHT_LCD_SUPPORT
+	select LCD_CLASS_DEVICE
+	select BACKLIGHT_CLASS_DEVICE
+	select POWER_SUPPLY
+	select HWMON
+	select VIDEO_OUTPUT_CONTROL
+	select INPUT_SPARSEKMAP
+	select INPUT_EVDEV
+	depends on INPUT
+	default m
+	help
+	  YeeLoong netbook is a mini laptop made by Lemote, which is basically
+	  compatible to FuLoong2F mini PC, but it has an extra Embedded
+	  Controller(kb3310b) for battery, hotkey, backlight, temperature and
+	  fan management.
+
+config LEMOTE_LYNLOONG2F
+	tristate "Lemote LynLoong PC"
+	depends on LEMOTE_MACH2F
+	select BACKLIGHT_LCD_SUPPORT
+	select BACKLIGHT_CLASS_DEVICE
+	select VIDEO_OUTPUT_CONTROL
+	default m
+	help
+	  LynLoong PC is an AllINONE machine made by Lemote, which is basically
+	  compatible to FuLoong2F Mini PC, the only difference is that it has a
+	  size-fixed screen: 1360x768 with sisfb video driver. and also, it has
+	  its own specific suspend support.
+
+config GDIUM_LAPTOP
+	tristate "GDIUM laptop extras"
+	depends on DEXXON_GDIUM
+	select POWER_SUPPLY
+	select I2C
+	select INPUT_POLLDEV
+	default m
+	help
+	  This mini-driver drives the ST7 chipset present in the Gdium laptops.
+	  This gives battery support, wlan rfkill.
+
+endif # MIPS_PLATFORM_DEVICES
