@@ -31,7 +31,7 @@ modules.builtin
 *.xz
 *.lz4
 *.lzo
-*.patch
+#*.patch
 *.gcno
 
 #
@@ -65,10 +65,10 @@ include/generated
 arch/*/include/generated
 
 # stgit generated dirs
-patches-*
+#patches-*
 
 # quilt's files
-patches
+#patches
 series
 
 # cscope files
