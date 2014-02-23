@@ -1,0 +1,15 @@
+diff -uprN linux-3.12/arch/mips/loongson/Platform linux-3.12-loongson/arch/mips/loongson/Platform
+--- linux-3.12/arch/mips/loongson/Platform	2013-11-04 07:41:51.000000000 +0800
++++ linux-3.12-loongson/arch/mips/loongson/Platform	2014-02-10 02:52:49.661222077 +0800
+@@ -5,9 +5,9 @@
+ # Only gcc >= 4.4 have Loongson specific support
+ cflags-$(CONFIG_CPU_LOONGSON2)	+= -Wa,--trap
+ cflags-$(CONFIG_CPU_LOONGSON2E) += \
+-	$(call cc-option,-march=loongson2e,-march=r4600)
++	$(call cc-option,-march=loongson2e)
+ cflags-$(CONFIG_CPU_LOONGSON2F) += \
+-	$(call cc-option,-march=loongson2f,-march=r4600)
++	$(call cc-option,-march=loongson2f)
+ # Enable the workarounds for Loongson2f
+ ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
+   ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-nop,),)

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for file in `tree -if --noreport | egrep "\.(patch|patch1|diff)$"`; do
+    patch -p1 < $file
+    if [ $? != 0 ]; then
+        exit 1
+    fi
+done

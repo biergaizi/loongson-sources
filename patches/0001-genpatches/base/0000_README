@@ -1,0 +1,116 @@
+README
+--------------------------------------------------------------------------
+This patchset is to be the 2.6 series of gentoo-sources.
+It is designed for cross-compatibility, fixes and stability, with performance
+and additional features/driver support being a second.
+
+Unless otherwise stated and marked as such, this kernel should be suitable for
+all environments.
+
+
+Patchset Numbering Scheme
+--------------------------------------------------------------------------
+
+FIXES
+1000-1400	linux-stable
+1400-1500	linux-stable queue
+1500-1700	security
+1700-1800	architecture-related
+1800-1900	mm/scheduling/misc
+1900-2000	filesystems
+2000-2100	networking core
+2100-2200	storage core
+2200-2300	power management (ACPI, APM)
+2300-2400	bus (USB, IEEE1394, PCI, PCMCIA, ...)
+2400-2500	network drivers
+2500-2600	storage drivers
+2600-2700	input
+2700-2900	media (graphics, sound, tv)
+2900-3000	other
+3000-4000	reserved
+
+FEATURES
+4000-4100	network
+4100-4200	storage
+4200-4300	graphics
+4300-4400	filesystem
+4400-4500   security enhancement
+4500-4600   other
+
+EXPERIMENTAL
+5000-5100   experimental patches (BFQ, ...)
+
+Individual Patch Descriptions:
+--------------------------------------------------------------------------
+Patch:  1000_linux-3.13.1.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.13.1
+
+Patch:  1001_linux-3.13.2.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.13.2
+
+Patch:  1002_linux-3.13.3.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.13.3
+
+Patch:  1003_linux-3.13.4.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.13.4
+
+Patch:  1500_XATTR_USER_PREFIX.patch
+From:   https://bugs.gentoo.org/show_bug.cgi?id=470644
+Desc:   Support for namespace user.pax.* on tmpfs.
+
+Patch:  1700_enable-thinkpad-micled.patch
+From:   https://bugs.gentoo.org/show_bug.cgi?id=449248
+Desc:   Enable mic mute led in thinkpads
+
+Patch:  1900_frozen-fs-time-update.patch
+From:   https://bugs.gentoo.org/show_bug.cgi?id=493002
+Desc:   Skip file_update_time on frozen fs
+
+Patch:  2400_kcopy-patch-for-infiniband-driver.patch
+Patch:  2400_kcopy-patch-for-infiniband-driver.patch
+From:   Alexey Shvetsov <alexxy@gentoo.org>
+Desc:   Zero copy for infiniband psm userspace driver
+
+Patch:  2700_ThinkPad-30-brightness-control-fix.patch
+From:   Seth Forshee <seth.forshee@canonical.com>
+Desc:   ACPI: Disable Windows 8 compatibility for some Lenovo ThinkPads
+
+Patch:  2900_dev-root-proc-mount-fix.patch
+From:   https://bugs.gentoo.org/show_bug.cgi?id=438380
+Desc:   Ensure that /dev/root doesn't appear in /proc/mounts when bootint without an initramfs.
+
+Patch:  2900_s2disk-resume-image-fix.patch
+From:   Al Viro <viro <at> ZenIV.linux.org.uk>
+Desc:   Do not lock when UMH is waiting on current thread spawned by linuxrc. (bug #481344)
+
+Patch:  4200_fbcondecor-0.9.6.patch
+From:   http://dev.gentoo.org/~spock
+Desc:   Bootsplash successor by Michal Januszewski ported by Jeremy (bug #452574)
+
+Patch:  4500_support-for-pogoplug-e02.patch
+From:   Cristoph Junghans <ottxor@gentoo.org>
+Desc:   Support for Pogoplug e02 (bug #460350), adjusted to be opt-in by TomWij.
+
+Patch:  4567_distro-Gentoo-Kconfig.patch
+From:   Tom Wijsman <TomWij@gentoo.org>
+Desc:   Add Gentoo Linux support config settings and defaults.
+
+Patch:  5000_BFQ-1-block-cgroups-kconfig-build-bits-for-v7r1-3.13.patch
+From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
+Desc:   BFQ v7r1 patch 1 for 3.13: Build, cgroups and kconfig bits
+
+Patch:  5000_BFQ-2-block-introduce-the-v7r1-I-O-sched-for-3.13.patch1
+From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
+Desc:   BFQ v7r1 patch 2 for 3.13: BFQ Scheduler
+
+Patch:  5000_BFQ-3-block-add-Early-Queue-Merge-EQM-v7r1-for-3.13.0.patch
+From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
+Desc:   BFQ v7r1 patch 3 for 3.13: Early Queue Merge (EQM)
+
+Patch:  5000_enable-additional-cpu-optimizations-for-gcc.patch
+From:   https://github.com/graysky2/kernel_gcc_patch/
+Desc:   Kernel patch enables gcc optimizations for additional CPUs.

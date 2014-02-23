@@ -52,7 +52,6 @@ void remove_wait_queue(wait_queue_head_t *q, wait_queue_t *wait)
 EXPORT_SYMBOL(remove_wait_queue);
 
 
-#ifndef CONFIG_SCHED_BFS
 /*
  * The core wakeup function. Non-exclusive wakeups (nr_exclusive == 0) just
  * wake everything up. If it's an exclusive wakeup (nr_exclusive == small +ve
@@ -155,7 +154,6 @@ void __wake_up_sync(wait_queue_head_t *q, unsigned int mode, int nr_exclusive)
 	__wake_up_sync_key(q, mode, nr_exclusive, NULL);
 }
 EXPORT_SYMBOL_GPL(__wake_up_sync);	/* For internal use only */
-#endif
 
 /*
  * Note: we use "set_current_state()" _after_ the wait-queue add,

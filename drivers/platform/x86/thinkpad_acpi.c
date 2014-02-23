@@ -2920,81 +2920,6 @@ static void hotkey_wakeup_hotunplug_complete_notify_change(void)
 		     "wakeup_hotunplug_complete");
 }
 
-/* sysfs hotkey_mute_state --------------------------------------------- */
-enum {
-	TPACPI_AML_MUTE_READ_MASK = 0x01,
-	TPACPI_AML_MUTE_ERROR_STATE_MASK = 0x80000000,
-};
-
-static ssize_t hotkey_mute_state_show(struct device *dev,
-			   struct device_attribute *attr,
-			   char *buf)
-{
-	int state;
-
-	if (!acpi_evalf(hkey_handle, &state, "GSMS", "dd"))
-		return -EIO;
-
-	if (state & TPACPI_AML_MUTE_ERROR_STATE_MASK)
-		pr_warn("getting mute state failed.\n");
-
-	state &= TPACPI_AML_MUTE_READ_MASK;
-
-	return snprintf(buf, PAGE_SIZE, "%x\n", state);
-}
-
-static ssize_t hotkey_mute_state_store(struct device *dev,
-			    struct device_attribute *attr,
-			    const char *buf, size_t count)
-{
-	unsigned long state;
-	int output;
-
-	if (parse_strtoul(buf, 25, &state))
-		return -EINVAL;
-
-	if (state != 1 && state != 0)
-		return -EINVAL;
-
-	if (!acpi_evalf(hkey_handle, &output, "SSMS", "dd", state))
-		return -EIO;
-
-	if (output & TPACPI_AML_MUTE_ERROR_STATE_MASK)
-		return -EIO;
-
-	return count;
-}
-
-static struct device_attribute dev_attr_hotkey_mute_state =
-	__ATTR(hotkey_mute_state, S_IWUSR | S_IRUGO,
-	hotkey_mute_state_show, hotkey_mute_state_store);
-
-/* sysfs hotkey_mute_enable -------------------------------------------- */
-static ssize_t hotkey_mute_enable_store(struct device *dev,
-			    struct device_attribute *attr,
-			    const char *buf, size_t count)
-{
-	unsigned long state;
-	int output;
-
-	if (parse_strtoul(buf, 25, &state))
-		return -EINVAL;
-
-	if (state != 1 && state != 0)
-		return -EINVAL;
-
-	if (!acpi_evalf(hkey_handle, &output, "SHDA", "dd", state))
-		return -EIO;
-
-	if (output & TPACPI_AML_MUTE_ERROR_STATE_MASK)
-		return -EIO;
-
-	return count;
-}
-
-static struct device_attribute dev_attr_hotkey_mute_enable =
-	__ATTR(hotkey_mute_enable, S_IWUSR, NULL, hotkey_mute_enable_store);
-
 /* --------------------------------------------------------------------- */
 
 static struct attribute *hotkey_attributes[] __initdata = {
@@ -3010,8 +2935,6 @@ static struct attribute *hotkey_attributes[] __initdata = {
 	&dev_attr_hotkey_source_mask.attr,
 	&dev_attr_hotkey_poll_freq.attr,
 #endif
-	&dev_attr_hotkey_mute_state.attr,
-	&dev_attr_hotkey_mute_enable.attr,
 };
 
 /*

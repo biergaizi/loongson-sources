@@ -75,6 +75,19 @@ config VT_CONSOLE_SLEEP
 	def_bool y
 	depends on VT_CONSOLE && PM_SLEEP
 
+config NR_TTY_DEVICES
+        int "Maximum tty device number"
+        depends on VT
+        range 12 63
+        default 63
+        ---help---
+          This option is used to change the number of tty devices in /dev.
+          The default value is 63. The lowest number you can set is 12,
+          63 is also the upper limit so we don't overrun the serial
+          consoles.
+
+          If unsure, say 63.
+
 menuconfig VT_CKO
 	bool "Colored kernel message output"
 	depends on VT_CONSOLE
@@ -179,19 +192,6 @@ config VT_PRINTK_DEBUG_COLOR
 	---help---
 	  This option defines with which color kernel debug messages will
 	  be printed to the console.
-
-config NR_TTY_DEVICES
-        int "Maximum tty device number"
-        depends on VT
-        range 12 63
-        default 63
-        ---help---
-          This option is used to change the number of tty devices in /dev.
-          The default value is 63. The lowest number you can set is 12,
-          63 is also the upper limit so we don't overrun the serial
-          consoles.
-
-          If unsure, say 63.
 
 config HW_CONSOLE
 	bool
@@ -484,7 +484,7 @@ config TRACE_SINK
 	  "Trace data router for MIPI P1149.7 cJTAG standard".
 
 config PPC_EPAPR_HV_BYTECHAN
-	tristate "ePAPR hypervisor byte channel driver"
+	bool "ePAPR hypervisor byte channel driver"
 	depends on PPC
 	select EPAPR_PARAVIRT
 	help
