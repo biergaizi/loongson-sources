@@ -28,7 +28,6 @@ modules.builtin
 *.gz
 *.bz2
 *.lzma
-*.xz
 *.lz4
 *.lzo
 #*.patch
