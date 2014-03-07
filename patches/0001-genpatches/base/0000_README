@@ -62,6 +62,10 @@ Patch:  1004_linux-3.13.5.patch
 From:   http://www.kernel.org
 Desc:   Linux 3.13.5
 
+Patch:  1005_linux-3.13.6.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.13.6
+
 Patch:  1500_XATTR_USER_PREFIX.patch
 From:   https://bugs.gentoo.org/show_bug.cgi?id=470644
 Desc:   Support for namespace user.pax.* on tmpfs.
