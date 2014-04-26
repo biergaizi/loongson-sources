@@ -1,6 +1,6 @@
 VERSION = 3
 PATCHLEVEL = 13
-SUBLEVEL = 7
+SUBLEVEL = 11
 EXTRAVERSION =
 NAME = One Giant Leap for Frogkind
 
@@ -376,7 +376,10 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
-		   -fno-delete-null-pointer-checks
+		   -fno-delete-null-pointer-checks \
+		   -ftree-vectorize -pipe \
+		   -floop-interchange -ftree-loop-distribution \
+		   -floop-strip-mine -floop-block
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
