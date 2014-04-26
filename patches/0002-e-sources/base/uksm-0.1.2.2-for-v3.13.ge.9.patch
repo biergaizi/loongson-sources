@@ -140,7 +140,7 @@ index a77d2b2..d435567 100644
  		K(quicklist_total_size()),
  #endif
 diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index db09234..b936093 100644
+index 8e4f41d..99f1433 100644
 --- a/include/asm-generic/pgtable.h
 +++ b/include/asm-generic/pgtable.h
 @@ -502,12 +502,25 @@ extern void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
@@ -541,7 +541,7 @@ index dfa736c..79a2187 100644
  		retval = copy_page_range(mm, oldmm, mpnt);
  
 diff --git a/lib/Makefile b/lib/Makefile
-index a459c31..9630dae 100644
+index 04944e9..e1c257b 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
 @@ -8,7 +8,7 @@ KBUILD_CFLAGS = $(subst -pg,,$(ORIG_CFLAGS))
@@ -1087,7 +1087,7 @@ index 305d10a..b5e5920 100644
  obj-$(CONFIG_SLAB) += slab.o
  obj-$(CONFIG_SLUB) += slub.o
 diff --git a/mm/memory.c b/mm/memory.c
-index 6768ce9..146ef7d 100644
+index dda27b9..0b6d379 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
 @@ -116,6 +116,27 @@ __setup("norandmaps", disable_randmaps);
@@ -1202,7 +1202,7 @@ index 6768ce9..146ef7d 100644
  		entry = mk_pte(new_page, vma->vm_page_prot);
  		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 834b2d7..9211c9b 100644
+index 546db74..0d702d4 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -36,6 +36,7 @@
@@ -1281,7 +1281,7 @@ index 834b2d7..9211c9b 100644
  	validate_mm(mm);
  
  	return 0;
-@@ -1247,6 +1263,9 @@ unsigned long do_mmap_pgoff(struct file *file, unsigned long addr,
+@@ -1255,6 +1271,9 @@ unsigned long do_mmap_pgoff(struct file *file, unsigned long addr,
  	vm_flags = calc_vm_prot_bits(prot) | calc_vm_flag_bits(flags) |
  			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
  
@@ -1291,7 +1291,7 @@ index 834b2d7..9211c9b 100644
  	if (flags & MAP_LOCKED)
  		if (!can_do_mlock())
  			return -EPERM;
-@@ -1591,6 +1610,7 @@ munmap_back:
+@@ -1599,6 +1618,7 @@ munmap_back:
  	if (vm_flags & VM_DENYWRITE)
  		allow_write_access(file);
  	file = vma->vm_file;
@@ -1299,7 +1299,7 @@ index 834b2d7..9211c9b 100644
  out:
  	perf_event_mmap(vma);
  
-@@ -1627,6 +1647,7 @@ unmap_and_free_vma:
+@@ -1635,6 +1655,7 @@ unmap_and_free_vma:
  	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
  	charged = 0;
  free_vma:
@@ -1307,7 +1307,7 @@ index 834b2d7..9211c9b 100644
  	kmem_cache_free(vm_area_cachep, vma);
  unacct_error:
  	if (charged)
-@@ -1875,7 +1896,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
+@@ -1883,7 +1904,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
  	info.align_mask = 0;
  	return vm_unmapped_area(&info);
  }
@@ -1316,7 +1316,7 @@ index 834b2d7..9211c9b 100644
  
  /*
   * This mmap-allocator allocates new areas top-down from below the
-@@ -2421,6 +2442,8 @@ static int __split_vma(struct mm_struct * mm, struct vm_area_struct * vma,
+@@ -2429,6 +2450,8 @@ static int __split_vma(struct mm_struct * mm, struct vm_area_struct * vma,
  	else
  		err = vma_adjust(vma, vma->vm_start, addr, vma->vm_pgoff, new);
  
@@ -1325,7 +1325,7 @@ index 834b2d7..9211c9b 100644
  	/* Success. */
  	if (!err)
  		return 0;
-@@ -2586,6 +2609,7 @@ static unsigned long do_brk(unsigned long addr, unsigned long len)
+@@ -2594,6 +2617,7 @@ static unsigned long do_brk(unsigned long addr, unsigned long len)
  		return addr;
  
  	flags = VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
@@ -1333,7 +1333,7 @@ index 834b2d7..9211c9b 100644
  
  	error = get_unmapped_area(NULL, addr, len, 0, MAP_FIXED);
  	if (error & ~PAGE_MASK)
-@@ -2653,6 +2677,7 @@ static unsigned long do_brk(unsigned long addr, unsigned long len)
+@@ -2661,6 +2685,7 @@ static unsigned long do_brk(unsigned long addr, unsigned long len)
  	vma->vm_flags = flags;
  	vma->vm_page_prot = vm_get_page_prot(flags);
  	vma_link(mm, vma, prev, rb_link, rb_parent);
@@ -1341,7 +1341,7 @@ index 834b2d7..9211c9b 100644
  out:
  	perf_event_mmap(vma);
  	mm->total_vm += len >> PAGE_SHIFT;
-@@ -2688,6 +2713,12 @@ void exit_mmap(struct mm_struct *mm)
+@@ -2696,6 +2721,12 @@ void exit_mmap(struct mm_struct *mm)
  	/* mm's last user has gone, and its about to be pulled down */
  	mmu_notifier_release(mm);
  
@@ -1354,7 +1354,7 @@ index 834b2d7..9211c9b 100644
  	if (mm->locked_vm) {
  		vma = mm->mmap;
  		while (vma) {
-@@ -2724,6 +2755,11 @@ void exit_mmap(struct mm_struct *mm)
+@@ -2732,6 +2763,11 @@ void exit_mmap(struct mm_struct *mm)
  	}
  	vm_unacct_memory(nr_accounted);
  
@@ -1366,7 +1366,7 @@ index 834b2d7..9211c9b 100644
  	WARN_ON(atomic_long_read(&mm->nr_ptes) >
  			(FIRST_USER_ADDRESS+PMD_SIZE-1)>>PMD_SHIFT);
  }
-@@ -2832,6 +2868,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+@@ -2840,6 +2876,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
  				new_vma->vm_ops->open(new_vma);
  			vma_link(mm, new_vma, prev, rb_link, rb_parent);
  			*need_rmap_locks = false;
@@ -1374,7 +1374,7 @@ index 834b2d7..9211c9b 100644
  		}
  	}
  	return new_vma;
-@@ -2933,10 +2970,10 @@ int install_special_mapping(struct mm_struct *mm,
+@@ -2941,10 +2978,10 @@ int install_special_mapping(struct mm_struct *mm,
  	ret = insert_vm_struct(mm, vma);
  	if (ret)
  		goto out;
@@ -1404,7 +1404,7 @@ index 068522d..7552b6d 100644
  static void __page_set_anon_rmap(struct page *page,
 diff --git a/mm/uksm.c b/mm/uksm.c
 new file mode 100644
-index 0000000..794867a
+index 0000000..a418deca
 --- /dev/null
 +++ b/mm/uksm.c
 @@ -0,0 +1,5640 @@
@@ -3014,7 +3014,7 @@ index 0000000..794867a
 +static struct page *page_trans_compound_anon(struct page *page)
 +{
 +	if (PageTransCompound(page)) {
-+		struct page *head = compound_trans_head(page);
++		struct page *head = compound_head(page);
 +		/*
 +		 * head may actually be splitted and freed from under
 +		 * us but it's ok here.

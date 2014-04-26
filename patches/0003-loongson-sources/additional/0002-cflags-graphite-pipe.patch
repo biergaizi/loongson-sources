@@ -1,0 +1,15 @@
+diff -rupN linux-3.13-orig/Makefile linux-3.13-new/Makefile
+--- linux-3.13-orig/Makefile	2014-04-04 01:54:51.000000000 +0200
++++ linux-3.13-new/Makefile	2014-04-05 13:51:36.992412744 +0200
+@@ -376,7 +376,10 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstric
+ 		   -fno-strict-aliasing -fno-common \
+ 		   -Werror-implicit-function-declaration \
+ 		   -Wno-format-security \
+-		   -fno-delete-null-pointer-checks
++		   -fno-delete-null-pointer-checks \
++		   -ftree-vectorize -pipe \
++		   -floop-interchange -ftree-loop-distribution \
++		   -floop-strip-mine -floop-block
+ KBUILD_AFLAGS_KERNEL :=
+ KBUILD_CFLAGS_KERNEL :=
+ KBUILD_AFLAGS   := -D__ASSEMBLY__
