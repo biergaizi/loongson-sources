@@ -61,7 +61,6 @@
 #include <linux/freezer.h>
 #include <linux/delay.h>
 #include <linux/slab.h>
-
 #include <linux/nvram.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
@@ -74,21 +73,16 @@
 #include <linux/input.h>
 #include <linux/leds.h>
 #include <linux/rfkill.h>
-#include <asm/uaccess.h>
-
 #include <linux/dmi.h>
 #include <linux/jiffies.h>
 #include <linux/workqueue.h>
-
+#include <linux/acpi.h>
+#include <linux/pci_ids.h>
+#include <linux/thinkpad_acpi.h>
 #include <sound/core.h>
 #include <sound/control.h>
 #include <sound/initval.h>
-
-#include <acpi/acpi_drivers.h>
-
-#include <linux/pci_ids.h>
-
-#include <linux/thinkpad_acpi.h>
+#include <asm/uaccess.h>
 
 /* ThinkPad CMOS commands */
 #define TP_CMOS_VOLUME_DOWN	0
@@ -5028,10 +5022,8 @@ static const char * const tpacpi_led_names[TPACPI_LED_NUMLEDS] = {
 	"tpacpi::unknown_led2",
 	"tpacpi::unknown_led3",
 	"tpacpi::thinkvantage",
-	"tpacpi::unknown_led4",
-	"tpacpi::micmute",
 };
-#define TPACPI_SAFE_LEDS	0x5081U
+#define TPACPI_SAFE_LEDS	0x1081U
 
 static inline bool tpacpi_is_led_restricted(const unsigned int led)
 {
@@ -5254,7 +5246,7 @@ static const struct tpacpi_quirk led_useful_qtable[] __initconst = {
 	{ /* Lenovo */
 	  .vendor = PCI_VENDOR_ID_LENOVO,
 	  .bios = TPACPI_MATCH_ANY, .ec = TPACPI_MATCH_ANY,
-	  .quirks = 0x5fffU,
+	  .quirks = 0x1fffU,
 	},
 	{ /* IBM ThinkPads with no EC version string */
 	  .vendor = PCI_VENDOR_ID_IBM,

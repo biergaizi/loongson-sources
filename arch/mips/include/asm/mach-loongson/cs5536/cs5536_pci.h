@@ -13,7 +13,6 @@
 
 #include <linux/types.h>
 #include <linux/pci_regs.h>
-#include <linux/pci_ids.h>
 
 extern void cs5536_pci_conf_write4(int function, int reg, u32 value);
 extern u32 cs5536_pci_conf_read4(int function, int reg);

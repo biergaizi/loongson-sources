@@ -728,8 +728,7 @@ static struct notifier_block netconsole_netdev_notifier = {
 	.notifier_call  = netconsole_netdev_event,
 };
 
-static void write_msg(struct console *con, const char *msg, unsigned int len,
-                      unsigned int loglevel)
+static void write_msg(struct console *con, const char *msg, unsigned int len)
 {
 	int frag, left;
 	unsigned long flags;

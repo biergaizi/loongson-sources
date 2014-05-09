@@ -24,10 +24,4 @@
 
 #endif
 
-#ifdef CONFIG_DEXXON_GDIUM
-
-#define LOONGSON_MACHTYPE MACH_DEXXON_GDIUM2F10
-
-#endif
-
 #endif /* __ASM_MACH_LOONGSON_MACHINE_H */

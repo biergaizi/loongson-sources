@@ -26,15 +26,6 @@ config MACH_NET5BIG_V2
 	  Say 'Y' here if you want your kernel to support the
 	  LaCie 5Big Network v2 NAS.
 
-config MACH_POGO_E02
-	bool "CE Pogoplug E02"
-	default n
-	help
-	  Say 'Y' here if you want your kernel to support the
-	  CloudEngines Pogoplug e02. It differs from Marvell's
-	  SheevaPlug Reference Board by a few details, but
-	  especially in the led assignments.
-
 config MACH_OPENRD
 	select KIRKWOOD_LEGACY
         bool

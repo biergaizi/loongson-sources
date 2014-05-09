@@ -299,42 +299,7 @@ extern void _wrmsr(u32 msr, u32 hi, u32 lo);
 
 /****************** NATIVE ***************************/
 /* GPIO : I/O SPACE; REG : 32BITS */
-#define	GPIOL_OUT_VAL		0x00
-#define	GPIOL_OUT_EN		0x04
-#define	GPIOL_OUT_AUX1_SEL	0x10
-/* SMB : I/O SPACE, REG : 8BITS WIDTH */
-#define	SMB_SDA			0x00
-#define	SMB_STS			0x01
-#define	SMB_STS_SLVSTP		(1 << 7)
-#define	SMB_STS_SDAST		(1 << 6)
-#define	SMB_STS_BER		(1 << 5)
-#define	SMB_STS_NEGACK		(1 << 4)
-#define	SMB_STS_STASTR		(1 << 3)
-#define	SMB_STS_NMATCH		(1 << 2)
-#define	SMB_STS_MASTER		(1 << 1)
-#define	SMB_STS_XMIT		(1 << 0)
-#define	SMB_CTRL_STS		0x02
-#define	SMB_CSTS_TGSTL		(1 << 5)
-#define	SMB_CSTS_TSDA		(1 << 4)
-#define	SMB_CSTS_GCMTCH		(1 << 3)
-#define	SMB_CSTS_MATCH		(1 << 2)
-#define	SMB_CSTS_BB		(1 << 1)
-#define	SMB_CSTS_BUSY		(1 << 0)
-#define	SMB_CTRL1		0x03
-#define	SMB_CTRL1_STASTRE	(1 << 7)
-#define	SMB_CTRL1_NMINTE	(1 << 6)
-#define	SMB_CTRL1_GCMEN		(1 << 5)
-#define	SMB_CTRL1_ACK		(1 << 4)
-#define	SMB_CTRL1_RSVD		(1 << 3)
-#define	SMB_CTRL1_INTEN		(1 << 2)
-#define	SMB_CTRL1_STOP		(1 << 1)
-#define	SMB_CTRL1_START		(1 << 0)
-#define	SMB_ADDR		0x04
-#define	SMB_ADDR_SAEN		(1 << 7)
-#define	SMB_CONTROLLER_ADDR	(0xef << 0)
-#define	SMB_CTRL2		0x05
-#define	SMB_FREQ		(0x20 << 1)
-#define	SMB_ENABLE		(0x01 << 0)
-#define	SMB_CTRL3		0x06
+#define GPIOL_OUT_VAL		0x00
+#define GPIOL_OUT_EN		0x04
 
 #endif				/* _CS5536_H */

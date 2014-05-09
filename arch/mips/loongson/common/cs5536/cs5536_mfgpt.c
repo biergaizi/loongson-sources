@@ -7,9 +7,6 @@
  * Copyright (C) 2009 Lemote Inc.
  * Author: Wu zhangjin, wuzhangjin@gmail.com
  *
- * Copyright (C) 2010 Lemote Inc.
- * Author: Gang Liang, randomizedthinking@gmail.com
- *
  * Reference: AMD Geode(TM) CS5536 Companion Device Data Book
  *
  *  This program is free software; you can redistribute	 it and/or modify it
@@ -18,24 +15,11 @@
  *  option) any later version.
  */
 
-/*
- * The MFGPT base address is variable, i.e., it could change over time. In
- * reality, it only changes once when setting up the PCI memory mapping (occurs
- * about 0.2 second from boot).  But because of this, we have to read in the
- * mfgpt base address repeatly in the beginning of various routines, most
- * noticeably, mfgpt1_read_cycle (for sched_clock), and mfgpt1_interrupt.
- *
- * The source of problem is that PMON and the current cs5536 set up pci
- * register window differently (to be further confirmed). Can we set
- * them the same so as to save the trouble here?
- *
- * Now an ugly hack is used to save a few CPU cycles... likely an
- * over-optimization. Feel free to remove it.
- */
-
 #include <linux/io.h>
 #include <linux/init.h>
 #include <linux/module.h>
+#include <linux/jiffies.h>
+#include <linux/spinlock.h>
 #include <linux/interrupt.h>
 #include <linux/clockchips.h>
 
@@ -43,127 +27,93 @@
 
 #include <cs5536/cs5536_mfgpt.h>
 
-static void mfgpt0_set_mode(enum clock_event_mode, struct clock_event_device*);
-static int mfgpt0_next_event(unsigned long, struct clock_event_device*);
-static irqreturn_t mfgpt0_interrupt(int irq, void *dev_id);
-static void mfgpt0_start_timer(u16 delta);
+DEFINE_SPINLOCK(mfgpt_lock);
+EXPORT_SYMBOL(mfgpt_lock);
 
-static cycle_t mfgpt1_read_cycle(struct clocksource *cs);
-
-static enum clock_event_mode mfgpt0_mode = CLOCK_EVT_MODE_SHUTDOWN;
 static u32 mfgpt_base;
 
-static struct clock_event_device mfgpt0_clockevent = {
-	.name = "mfgpt0",
-	.features = CLOCK_EVT_MODE_ONESHOT | CLOCK_EVT_FEAT_PERIODIC,
-	.set_mode = mfgpt0_set_mode,
-	.set_next_event = mfgpt0_next_event,
-	.rating = 220,
+/*
+ * Initialize the MFGPT timer.
+ *
+ * This is also called after resume to bring the MFGPT into operation again.
+ */
+
+/* disable counter */
+void disable_mfgpt0_counter(void)
+{
+	outw(inw(MFGPT0_SETUP) & 0x7fff, MFGPT0_SETUP);
+}
+EXPORT_SYMBOL(disable_mfgpt0_counter);
+
+/* enable counter, comparator2 to event mode, 14.318MHz clock */
+void enable_mfgpt0_counter(void)
+{
+	outw(0xe310, MFGPT0_SETUP);
+}
+EXPORT_SYMBOL(enable_mfgpt0_counter);
+
+static void init_mfgpt_timer(enum clock_event_mode mode,
+			     struct clock_event_device *evt)
+{
+	spin_lock(&mfgpt_lock);
+
+	switch (mode) {
+	case CLOCK_EVT_MODE_PERIODIC:
+		outw(COMPARE, MFGPT0_CMP2);	/* set comparator2 */
+		outw(0, MFGPT0_CNT);	/* set counter to 0 */
+		enable_mfgpt0_counter();
+		break;
+
+	case CLOCK_EVT_MODE_SHUTDOWN:
+	case CLOCK_EVT_MODE_UNUSED:
+		if (evt->mode == CLOCK_EVT_MODE_PERIODIC ||
+		    evt->mode == CLOCK_EVT_MODE_ONESHOT)
+			disable_mfgpt0_counter();
+		break;
+
+	case CLOCK_EVT_MODE_ONESHOT:
+		/* The oneshot mode have very high deviation, Not use it! */
+		break;
+
+	case CLOCK_EVT_MODE_RESUME:
+		/* Nothing to do here */
+		break;
+	}
+	spin_unlock(&mfgpt_lock);
+}
+
+static struct clock_event_device mfgpt_clockevent = {
+	.name = "mfgpt",
+	.features = CLOCK_EVT_FEAT_PERIODIC,
+	.set_mode = init_mfgpt_timer,
 	.irq = CS5536_MFGPT_INTR,
 };
 
-static struct irqaction irq5 = {
-	.handler = mfgpt0_interrupt,
-	.flags = IRQF_DISABLED | IRQF_NOBALANCING | IRQF_TIMER,
-	.name = "mfgpt0-timer"
-};
-
-static struct clocksource mfgpt1_clocksource = {
-	.name = "mfgpt1",
-	.rating = 210,
-	.read = mfgpt1_read_cycle,
-	.mask = CLOCKSOURCE_MASK(16),
-	.flags = CLOCK_SOURCE_IS_CONTINUOUS
-};
-
-static inline void enable_mfgpt0_counter(void)
+static irqreturn_t timer_interrupt(int irq, void *dev_id)
 {
 	u32 basehi;
-	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
 
-	/* clockevent: 14M, divisor = 8 (scale=3), CMP2 event mode */
-	outw(MFGPT_SETUP_ACK | MFGPT_SETUP_CMP2EVT |
-	     MFGPT_SETUP_CLOCK(1) | MFGPT_SETUP_SCALE(3), MFGPT0_SETUP);
-	outw(0, MFGPT0_CNT);
-	outw(MFGPT_COMPARE(1, 3), MFGPT0_CMP2);
-	outw(0xFFFF, MFGPT0_SETUP);
-}
-
-static inline void enable_mfgpt1_counter(void)
-{
-	u32 basehi;
-	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
-
-	/* clocksource: 32K w/ divisor = 2 (scale=1) */
-	outw(MFGPT_SETUP_ACK | MFGPT_SETUP_CLOCK(0) |
-		MFGPT_SETUP_SCALE(1), MFGPT1_SETUP);
-
-	outw(0, MFGPT1_CNT);
-	outw(0xFFFF, MFGPT1_CMP2);  /* CNT won't tick with no CMP set */
-	outw(0xFFFF, MFGPT1_SETUP);
-}
-
-void enable_mfgpt_counter(void)
-{
-	/* TODO: add a mfgpt system hard reset here
-	 * timers might not reset correctly when OS crashes
+	/*
+	 * get MFGPT base address
+	 *
+	 * NOTE: do not remove me, it's need for the value of mfgpt_base is
+	 * variable
 	 */
-
-	enable_mfgpt0_counter();
-	enable_mfgpt1_counter();
-}
-EXPORT_SYMBOL(enable_mfgpt_counter);
-
-void disable_mfgpt_counter(void)
-{
-	outw(0x7FFF, MFGPT0_SETUP);
-	outw(0x7FFF, MFGPT1_SETUP);
-}
-EXPORT_SYMBOL(disable_mfgpt_counter);
-
-static void mfgpt0_start_timer(u16 delta)
-{
-	outw(0x7FFF, MFGPT0_SETUP);
-	outw(0,      MFGPT0_CNT);
-	outw(delta,  MFGPT0_CMP2);
-	outw(0xFFFF, MFGPT0_SETUP);
-}
-
-static void mfgpt0_set_mode(enum clock_event_mode mode,
-		struct clock_event_device *evt)
-{
-	outw(0x7FFF, MFGPT0_SETUP);
-	if (mode == CLOCK_EVT_MODE_PERIODIC)
-		mfgpt0_start_timer(MFGPT_COMPARE(1, 3));
-
-	mfgpt0_mode = mode;
-}
-
-static int mfgpt0_next_event(unsigned long delta,
-		struct clock_event_device *evt)
-{
-	mfgpt0_start_timer(delta);
-	return 0;
-}
-
-static irqreturn_t mfgpt0_interrupt(int irq, void *dev_id)
-{
-	u32 basehi;
 	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
 
-	/* stop the timer and ack the interrupt */
-	outw(0x7FFF, MFGPT0_SETUP);
+	/* ack */
+	outw(inw(MFGPT0_SETUP) | 0x4000, MFGPT0_SETUP);
 
-	if (mfgpt0_mode == CLOCK_EVT_MODE_SHUTDOWN)
-		return IRQ_HANDLED;
+	mfgpt_clockevent.event_handler(&mfgpt_clockevent);
 
-	/* restart timer for periodic mode */
-	if (mfgpt0_mode == CLOCK_EVT_MODE_PERIODIC)
-		outw(0xFFFF, MFGPT0_SETUP);
-
-	mfgpt0_clockevent.event_handler(&mfgpt0_clockevent);
 	return IRQ_HANDLED;
 }
+
+static struct irqaction irq5 = {
+	.handler = timer_interrupt,
+	.flags = IRQF_NOBALANCING | IRQF_TIMER,
+	.name = "timer"
+};
 
 /*
  * Initialize the conversion factor and the min/max deltas of the clock event
@@ -171,15 +121,14 @@ static irqreturn_t mfgpt0_interrupt(int irq, void *dev_id)
  */
 void __init setup_mfgpt0_timer(void)
 {
-	struct clock_event_device *cd = &mfgpt0_clockevent;
+	u32 basehi;
+	struct clock_event_device *cd = &mfgpt_clockevent;
 	unsigned int cpu = smp_processor_id();
+
 	cd->cpumask = cpumask_of(cpu);
-
-	cd->shift = 22;
-	cd->mult  = div_sc(MFGPT_TICK_RATE(1, 3), NSEC_PER_SEC, cd->shift);
-
-	cd->min_delta_ns = clockevent_delta2ns(0xF, cd);
-	cd->max_delta_ns = clockevent_delta2ns(0xFFFF, cd);
+	clockevent_set_clock(cd, MFGPT_TICK_RATE);
+	cd->max_delta_ns = clockevent_delta2ns(0xffff, cd);
+	cd->min_delta_ns = clockevent_delta2ns(0xf, cd);
 
 	/* Enable MFGPT0 Comparator 2 Output to the Interrupt Mapper */
 	_wrmsr(DIVIL_MSR_REG(MFGPT_IRQ), 0, 0x100);
@@ -187,24 +136,79 @@ void __init setup_mfgpt0_timer(void)
 	/* Enable Interrupt Gate 5 */
 	_wrmsr(DIVIL_MSR_REG(PIC_ZSEL_LOW), 0, 0x50000);
 
-	enable_mfgpt0_counter();
+	/* get MFGPT base address */
+	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
+
 	clockevents_register_device(cd);
+
 	setup_irq(CS5536_MFGPT_INTR, &irq5);
 }
 
-static cycle_t mfgpt1_read_cycle(struct clocksource *cs)
+/*
+ * Since the MFGPT overflows every tick, its not very useful
+ * to just read by itself. So use jiffies to emulate a free
+ * running counter:
+ */
+static cycle_t mfgpt_read(struct clocksource *cs)
 {
-	return inw(MFGPT1_CNT);
+	unsigned long flags;
+	int count;
+	u32 jifs;
+	static int old_count;
+	static u32 old_jifs;
+
+	spin_lock_irqsave(&mfgpt_lock, flags);
+	/*
+	 * Although our caller may have the read side of xtime_lock,
+	 * this is now a seqlock, and we are cheating in this routine
+	 * by having side effects on state that we cannot undo if
+	 * there is a collision on the seqlock and our caller has to
+	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
+	 * jiffies as volatile despite the lock.  We read jiffies
+	 * before latching the timer count to guarantee that although
+	 * the jiffies value might be older than the count (that is,
+	 * the counter may underflow between the last point where
+	 * jiffies was incremented and the point where we latch the
+	 * count), it cannot be newer.
+	 */
+	jifs = jiffies;
+	/* read the count */
+	count = inw(MFGPT0_CNT);
+
+	/*
+	 * It's possible for count to appear to go the wrong way for this
+	 * reason:
+	 *
+	 *  The timer counter underflows, but we haven't handled the resulting
+	 *  interrupt and incremented jiffies yet.
+	 *
+	 * Previous attempts to handle these cases intelligently were buggy, so
+	 * we just do the simple thing now.
+	 */
+	if (count < old_count && jifs == old_jifs)
+		count = old_count;
+
+	old_count = count;
+	old_jifs = jifs;
+
+	spin_unlock_irqrestore(&mfgpt_lock, flags);
+
+	return (cycle_t) (jifs * COMPARE) + count;
 }
 
-int __init init_mfgpt1_clocksource(void)
+static struct clocksource clocksource_mfgpt = {
+	.name = "mfgpt",
+	.rating = 120, /* Functional for real use, but not desired */
+	.read = mfgpt_read,
+	.mask = CLOCKSOURCE_MASK(32),
+};
+
+int __init init_mfgpt_clocksource(void)
 {
 	if (num_possible_cpus() > 1)	/* MFGPT does not scale! */
 		return 0;
 
-	enable_mfgpt1_counter();
-
-	return clocksource_register_hz(&mfgpt1_clocksource, MFGPT_TICK_RATE(0, 1));
+	return clocksource_register_hz(&clocksource_mfgpt, MFGPT_TICK_RATE);
 }
 
-arch_initcall(init_mfgpt1_clocksource);
+arch_initcall(init_mfgpt_clocksource);

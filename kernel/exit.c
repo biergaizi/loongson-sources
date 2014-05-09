@@ -74,6 +74,7 @@ static void __unhash_process(struct task_struct *p, bool group_dead)
 		__this_cpu_dec(process_counts);
 	}
 	list_del_rcu(&p->thread_group);
+	list_del_rcu(&p->thread_node);
 }
 
 /*
@@ -135,7 +136,7 @@ static void __exit_signal(struct task_struct *tsk)
 		sig->inblock += task_io_get_inblock(tsk);
 		sig->oublock += task_io_get_oublock(tsk);
 		task_io_accounting_add(&sig->ioac, &tsk->ioac);
-		sig->sum_sched_runtime += tsk_seruntime(tsk);
+		sig->sum_sched_runtime += tsk->se.sum_exec_runtime;
 	}
 
 	sig->nr_threads--;
@@ -559,6 +560,9 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 				struct list_head *dead)
 {
 	list_move_tail(&p->sibling, &p->real_parent->children);
+
+	if (p->exit_state == EXIT_DEAD)
+		return;
 	/*
 	 * If this is a threaded reparent there is no need to
 	 * notify anyone anything has happened.
@@ -566,18 +570,8 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 	if (same_thread_group(p->real_parent, father))
 		return;
 
-	/*
-	 * We don't want people slaying init.
-	 *
-	 * Note: we do this even if it is EXIT_DEAD, wait_task_zombie()
-	 * can change ->exit_state to EXIT_ZOMBIE. If this is the final
-	 * state, do_notify_parent() was already called and ->exit_signal
-	 * doesn't matter.
-	 */
+	/* We don't want people slaying init.  */
 	p->exit_signal = SIGCHLD;
-
-	if (p->exit_state == EXIT_DEAD)
-		return;
 
 	/* If it has exited notify the new parent about this child's death. */
 	if (!p->ptrace &&
@@ -790,8 +784,6 @@ void do_exit(long code)
 	exit_shm(tsk);
 	exit_files(tsk);
 	exit_fs(tsk);
-	if (group_dead)
-		disassociate_ctty(1);
 	exit_task_namespaces(tsk);
 	exit_task_work(tsk);
 	check_stack_usage();
@@ -807,9 +799,13 @@ void do_exit(long code)
 
 	cgroup_exit(tsk, 1);
 
+	if (group_dead)
+		disassociate_ctty(1);
+
 	module_put(task_thread_info(tsk)->exec_domain->module);
 
 	proc_exit_connector(tsk);
+
 	/*
 	 * FIXME: do that only when needed, using sched_exit tracepoint
 	 */

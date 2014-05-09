@@ -32,43 +32,16 @@ config LEMOTE_FULOONG2E
 
 config LEMOTE_MACH2F
 	bool "Lemote Loongson 2F family machines"
-	select ARCH_SPARSEMEM_ENABLE if HIBERNATION
-	select BOARD_SCACHE
-	select BOOT_ELF32
-	select CEVT_R4K if ! MIPS_EXTERNAL_TIMER
-	select CPU_HAS_WB
-	select CS5536 if PCI
-	select CSRC_R4K if ! MIPS_EXTERNAL_TIMER
-	select DMA_NONCOHERENT
-	select GENERIC_ISA_DMA_SUPPORT_BROKEN
-	select HAVE_CLK
-	select HW_HAS_PCI
-	select I8259
-	select IRQ_CPU
-	select SYS_HAS_CPU_LOONGSON2F
-	select SYS_HAS_EARLY_PRINTK
-	select SYS_SUPPORTS_32BIT_KERNEL
-	select SYS_SUPPORTS_64BIT_KERNEL
-	select SYS_SUPPORTS_HIGHMEM if ! EMBEDDED
-	select SYS_SUPPORTS_LITTLE_ENDIAN
-	select LOONGSON_MC146818 if RTC_DRV_CMOS
-	help
-	  Lemote Loongson 2F family machines utilize the 2F revision of
-	  Loongson processor and the AMD CS5536 south bridge.
-
-	  These family machines include fuloong2f mini PC, yeeloong2f notebook,
-	  LingLoong allinone PC and so forth.
-
-config DEXXON_GDIUM
-	bool "Dexxon Gdium Netbook"
 	select ARCH_SPARSEMEM_ENABLE
 	select BOARD_SCACHE
 	select BOOT_ELF32
 	select CEVT_R4K if ! MIPS_EXTERNAL_TIMER
 	select CPU_HAS_WB
+	select CS5536
 	select CSRC_R4K if ! MIPS_EXTERNAL_TIMER
 	select DMA_NONCOHERENT
 	select GENERIC_ISA_DMA_SUPPORT_BROKEN
+	select HAVE_CLK
 	select HW_HAS_PCI
 	select I8259
 	select IRQ_CPU
@@ -79,34 +52,16 @@ config DEXXON_GDIUM
 	select SYS_SUPPORTS_64BIT_KERNEL
 	select SYS_SUPPORTS_HIGHMEM
 	select SYS_SUPPORTS_LITTLE_ENDIAN
-	select ARCH_REQUIRE_GPIOLIB
-	select HAVE_PWM if MFD_SM501
+	select LOONGSON_MC146818
 	help
-	  Dexxon gdium netbook based on Loongson 2F and SM502.
+	  Lemote Loongson 2F family machines utilize the 2F revision of
+	  Loongson processor and the AMD CS5536 south bridge.
+
+	  These family machines include fuloong2f mini PC, yeeloong2f notebook,
+	  LingLoong allinone PC and so forth.
 endchoice
 
 config CS5536
-	select CS5536_IDE if (PATA_AMD || BLK_DEV_AMD74XX || PATA_CS5536)
-	select CS5536_OHCI if USB_OHCI_HCD
-	select CS5536_EHCI if USB_EHCI_HCD
-	select CS5536_AUDIO if SND_CS5535AUDIO
-	select CS5536_ISA
-	bool
-
-config CS5536_ISA
-	select ISA
-	bool
-
-config CS5536_IDE
-	bool
-
-config CS5536_OHCI
-	bool
-
-config CS5536_EHCI
-	bool
-
-config CS5536_AUDIO
 	bool
 
 config CS5536_MFGPT
@@ -126,25 +81,13 @@ config LOONGSON_SUSPEND
 	default y
 	depends on CPU_SUPPORTS_CPUFREQ && SUSPEND
 
+config LOONGSON_UART_BASE
+	bool
+	default y
+	depends on EARLY_PRINTK || SERIAL_8250
+
 config LOONGSON_MC146818
 	bool
 	default n
 
-config GDIUM_PWM_CLOCK
-	tristate "Gdium PWM Timer"
-	default n
-	depends on HAVE_PWM && EXPERIMENTAL && BROKEN
-	select MIPS_EXTERNAL_TIMER
-	help
-	  This options enables the experimental sm501-pwm based clock. With it,
-	  you may be possible to use the loongson2f cpufreq driver.
-
-config GDIUM_VERSION
-	int "Configure Gdium Version"
-	depends on DEXXON_GDIUM
-	default "3"
-	help
-	  I have no information about how to determine which version your board
-	  is, If the default config doesn't work for it, please change it to
-	  smaller ones.
 endif # MACH_LOONGSON

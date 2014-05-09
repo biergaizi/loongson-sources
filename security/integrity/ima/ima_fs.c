@@ -160,8 +160,6 @@ static int ima_measurements_show(struct seq_file *m, void *v)
 
 		if (is_ima_template && strcmp(field->field_id, "d") == 0)
 			show = IMA_SHOW_BINARY_NO_FIELD_LEN;
-		if (is_ima_template && strcmp(field->field_id, "n") == 0)
-			show = IMA_SHOW_BINARY_OLD_STRING_FMT;
 		field->field_show(m, show, &e->template_data[i]);
 	}
 	return 0;

@@ -59,7 +59,8 @@ static inline void highlight_pointer(const int where)
 static u16
 sel_pos(int n)
 {
-	return screen_glyph(sel_cons, n);
+	return inverse_translate(sel_cons, screen_glyph(sel_cons, n),
+				use_unicode);
 }
 
 /**
@@ -321,8 +322,6 @@ int set_selection(const struct tiocl_selection __user *sel, struct tty_struct *t
 			}
 			obp = bp;
 		}
-		if (c > 0x80)
-			i += 2;
 	}
 	sel_buffer_lth = bp - sel_buffer;
 	return 0;

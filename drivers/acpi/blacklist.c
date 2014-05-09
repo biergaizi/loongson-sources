@@ -30,7 +30,6 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/acpi.h>
-#include <acpi/acpi_bus.h>
 #include <linux/dmi.h>
 
 #include "internal.h"
@@ -261,14 +260,6 @@ static struct dmi_system_id acpi_osi_dmi_table[] __initdata = {
 	},
 	{
 	.callback = dmi_disable_osi_win8,
-	.ident = "Dell Inspiron 15R SE",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-		     DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 7520"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
 	.ident = "ThinkPad Edge E530",
 	.matches = {
 		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
@@ -321,61 +312,6 @@ static struct dmi_system_id acpi_osi_dmi_table[] __initdata = {
 	.matches = {
 		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
 		     DMI_MATCH(DMI_PRODUCT_VERSION, "2349D15"),
-		},
-	},
-
-	/*
-	 * The following Lenovo models have a broken workaround in the
-	 * acpi_video backlight implementation to meet the Windows 8
-	 * requirement of 101 backlight levels. Reverting to pre-Win8
-	 * behavior fixes the problem.
-	 */
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad L430",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L430"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad T430s",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T430s"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad T530",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T530"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad W530",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad W530"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad X1 Carbon",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad X1 Carbon"),
-		},
-	},
-	{
-	.callback = dmi_disable_osi_win8,
-	.ident = "Lenovo ThinkPad X230",
-	.matches = {
-		     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-		     DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad X230"),
 		},
 	},
 

@@ -11,7 +11,9 @@
 #include <linux/interrupt.h>
 #include <linux/module.h>
 
+#include <asm/irq_cpu.h>
 #include <asm/i8259.h>
+#include <asm/mipsregs.h>
 
 #include <loongson.h>
 #include <machine.h>
@@ -114,6 +116,11 @@ void __init mach_init_irq(void)
 	/* setup cs5536 as high level trigger */
 	LOONGSON_INTPOL = LOONGSON_INT_BIT_INT0 | LOONGSON_INT_BIT_INT1;
 	LOONGSON_INTEDGE &= ~(LOONGSON_INT_BIT_INT0 | LOONGSON_INT_BIT_INT1);
+
+	/* Sets the first-level interrupt dispatcher. */
+	mips_cpu_irq_init();
+	init_i8259_irqs();
+	bonito_irq_init();
 
 	/* setup north bridge irq (bonito) */
 	setup_irq(LOONGSON_NORTH_BRIDGE_IRQ, &ip6_irqaction);

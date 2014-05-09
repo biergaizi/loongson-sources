@@ -303,15 +303,9 @@ int nla_memcmp(const struct nlattr *nla, const void *data,
  */
 int nla_strcmp(const struct nlattr *nla, const char *str)
 {
-	int len = strlen(str);
-	char *buf = nla_data(nla);
-	int attrlen = nla_len(nla);
-	int d;
+	int len = strlen(str) + 1;
+	int d = nla_len(nla) - len;
 
-	if (attrlen > 0 && buf[attrlen - 1] == '\0')
-		attrlen--;
-
-	d = attrlen - len;
 	if (d == 0)
 		d = memcmp(nla_data(nla), str, len);
 

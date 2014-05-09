@@ -6,8 +6,6 @@ menu "Character devices"
 
 source "drivers/tty/Kconfig"
 
-source "drivers/char/kcopy/Kconfig"
-
 config DEVKMEM
 	bool "/dev/kmem virtual device support"
 	default y
@@ -501,6 +499,7 @@ config RAW_DRIVER
 config MAX_RAW_DEVS
 	int "Maximum number of RAW devices to support (1-65536)"
 	depends on RAW_DRIVER
+	range 1 65536
 	default "256"
 	help
 	  The maximum number of RAW devices that are supported.
