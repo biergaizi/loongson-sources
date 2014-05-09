@@ -15,3 +15,5 @@ cp COPYING ${release}
 
 tar -cJf linux-${release}.tar.xz ${release}
 rm -rf ${release}
+
+gpg -o linux-${release}.tar.xz.sig -ab linux-${release}.tar.xz
