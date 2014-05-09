@@ -439,7 +439,7 @@ static void cleanup_timers(struct list_head *head)
  */
 void posix_cpu_timers_exit(struct task_struct *tsk)
 {
-	add_device_randomness((const void*) &tsk->se.sum_exec_runtime,
+	add_device_randomness((const void*) &tsk_seruntime(tsk),
 						sizeof(unsigned long long));
 	cleanup_timers(tsk->cpu_timers);
 
@@ -861,7 +861,7 @@ static void check_thread_timers(struct task_struct *tsk,
 	tsk_expires->virt_exp = expires_to_cputime(expires);
 
 	tsk_expires->sched_exp = check_timers_list(++timers, firing,
-						   tsk->se.sum_exec_runtime);
+						   tsk_seruntime(tsk));
 
 	/*
 	 * Check for the special case thread timers.
@@ -872,7 +872,7 @@ static void check_thread_timers(struct task_struct *tsk,
 			ACCESS_ONCE(sig->rlim[RLIMIT_RTTIME].rlim_max);
 
 		if (hard != RLIM_INFINITY &&
-		    tsk->rt.timeout > DIV_ROUND_UP(hard, USEC_PER_SEC/HZ)) {
+		    tsk_rttimeout(tsk) > DIV_ROUND_UP(hard, USEC_PER_SEC/HZ)) {
 			/*
 			 * At the hard limit, we just die.
 			 * No need to calculate anything else now.
@@ -880,7 +880,7 @@ static void check_thread_timers(struct task_struct *tsk,
 			__group_send_sig_info(SIGKILL, SEND_SIG_PRIV, tsk);
 			return;
 		}
-		if (tsk->rt.timeout > DIV_ROUND_UP(soft, USEC_PER_SEC/HZ)) {
+		if (tsk_rttimeout(tsk) > DIV_ROUND_UP(soft, USEC_PER_SEC/HZ)) {
 			/*
 			 * At the soft limit, send a SIGXCPU every second.
 			 */
@@ -1117,7 +1117,7 @@ static inline int fastpath_timer_check(struct task_struct *tsk)
 		struct task_cputime task_sample = {
 			.utime = utime,
 			.stime = stime,
-			.sum_exec_runtime = tsk->se.sum_exec_runtime
+			.sum_exec_runtime = tsk_seruntime(tsk)
 		};
 
 		if (task_cputime_expired(&task_sample, &tsk->cputime_expires))

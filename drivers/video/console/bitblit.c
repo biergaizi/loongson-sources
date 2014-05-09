@@ -10,6 +10,7 @@
  *  more details.
  */
 
+#include <linux/font.h>
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/string.h>
@@ -18,6 +19,7 @@
 #include <linux/console.h>
 #include <asm/types.h>
 #include "fbcon.h"
+#include "fbcondecor.h"
 
 /*
  * Accelerated handlers.
@@ -43,6 +45,21 @@ static void update_attr(u8 *dst, u8 *src, int attribute,
 	}
 }
 
+static inline u16 utf8_pos(struct vc_data *vc, const unsigned short *utf8)
+{
+	unsigned long p = (long)utf8;
+	if (p >= vc->vc_origin && p < vc->vc_scr_end) {
+		return scr_readw((unsigned short *)(p + vc->vc_screenbuf_size));
+	} else if (vc->vc_num == fg_console && fbcon_is_softback(utf8)){
+		return scr_readw((unsigned short *)(p + fbcon_softback_size));
+	} else {
+		u16 extra_c;
+		int c = *(int*)utf8;
+		extra_c = (c >> 16 ) & 0x0000ffff;
+		return extra_c;
+	}
+}
+
 static void bit_bmove(struct vc_data *vc, struct fb_info *info, int sy,
 		      int sx, int dy, int dx, int height, int width)
 {
@@ -54,6 +71,13 @@ static void bit_bmove(struct vc_data *vc, struct fb_info *info, int sy,
 	area.dy = dy * vc->vc_font.height;
 	area.height = height * vc->vc_font.height;
 	area.width = width * vc->vc_font.width;
+
+	if (fbcon_decor_active(info, vc)) {
+ 		area.sx += vc->vc_decor.tx;
+ 		area.sy += vc->vc_decor.ty;
+ 		area.dx += vc->vc_decor.tx;
+ 		area.dy += vc->vc_decor.ty;
+ 	}
 
 	info->fbops->fb_copyarea(info, &area);
 }
@@ -74,6 +98,34 @@ static void bit_clear(struct vc_data *vc, struct fb_info *info, int sy,
 	info->fbops->fb_fillrect(info, &region);
 }
 
+u8 * font_bits(struct vc_data *vc, const u16 *s,u32 cellsize,
+					u16 charmask)
+{
+	u32	utf8_c;
+
+	u8 *src = vc->vc_font.data + (scr_readw(s)&
+				  charmask)*cellsize;
+
+	utf8_c = utf8_pos(vc, s);
+
+	if( utf8_c <= vc->vc_font.charcount)
+	{
+		/*
+		 * decide left-half char or right-half char.
+		 * Since non-English chars may double weight
+		 */
+		switch (scr_readw(s) & charmask) {
+			case 0xff:
+				src = vc->vc_font.data + (utf8_c * cellsize *2 );
+				break;
+			case 0xfe:
+				src = vc->vc_font.data + (utf8_c * cellsize *2 + cellsize);
+				break;
+		}
+	}
+	return src;
+}
+
 static inline void bit_putcs_aligned(struct vc_data *vc, struct fb_info *info,
 				     const u16 *s, u32 attr, u32 cnt,
 				     u32 d_pitch, u32 s_pitch, u32 cellsize,
@@ -84,14 +136,12 @@ static inline void bit_putcs_aligned(struct vc_data *vc, struct fb_info *info,
 	u8 *src;
 
 	while (cnt--) {
-		src = vc->vc_font.data + (scr_readw(s++)&
-					  charmask)*cellsize;
+		src = font_bits(vc,s++,cellsize,charmask);
 
 		if (attr) {
 			update_attr(buf, src, attr, vc);
 			src = buf;
 		}
-
 		if (likely(idx == 1))
 			__fb_pad_aligned_buffer(dst, d_pitch, src, idx,
 						image->height);
@@ -119,14 +169,11 @@ static inline void bit_putcs_unaligned(struct vc_data *vc,
 	u8 *src;
 
 	while (cnt--) {
-		src = vc->vc_font.data + (scr_readw(s++)&
-					  charmask)*cellsize;
-
+		src = font_bits(vc,s++,cellsize,charmask);
 		if (attr) {
 			update_attr(buf, src, attr, vc);
 			src = buf;
 		}
-
 		fb_pad_unaligned_buffer(dst, d_pitch, src, idx,
 					image->height, shift_high,
 					shift_low, mod);
@@ -246,6 +293,8 @@ static void bit_cursor(struct vc_data *vc, struct fb_info *info, int mode,
 	int err = 1;
 	char *src;
 
+	int cellsize = DIV_ROUND_UP(vc->vc_font.width,8) * vc->vc_font.height;
+
 	cursor.set = 0;
 
 	if (softback_lines) {
@@ -259,7 +308,7 @@ static void bit_cursor(struct vc_data *vc, struct fb_info *info, int mode,
 
  	c = scr_readw((u16 *) vc->vc_pos);
 	attribute = get_attribute(info, c);
-	src = vc->vc_font.data + ((c & charmask) * (w * vc->vc_font.height));
+	src = font_bits(vc,(u16*)vc->vc_pos,cellsize,charmask);
 
 	if (ops->cursor_state.image.data != src ||
 	    ops->cursor_reset) {
@@ -380,11 +429,15 @@ static void bit_cursor(struct vc_data *vc, struct fb_info *info, int mode,
 	cursor.image.depth = 1;
 	cursor.rop = ROP_XOR;
 
-	if (info->fbops->fb_cursor)
-		err = info->fbops->fb_cursor(info, &cursor);
+	if (fbcon_decor_active(info, vc)) {
+		fbcon_decor_cursor(info, &cursor);
+	} else {
+		if (info->fbops->fb_cursor)
+			err = info->fbops->fb_cursor(info, &cursor);
 
-	if (err)
-		soft_cursor(info, &cursor);
+		if (err)
+			soft_cursor(info, &cursor);
+	}
 
 	ops->cursor_reset = 0;
 }

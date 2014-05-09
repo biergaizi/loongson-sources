@@ -30,8 +30,10 @@ void __init prom_init(void)
 	prom_init_env();
 	prom_init_memory();
 
+#ifdef CONFIG_EARLY_PRINTK
 	/*init the uart base address */
 	prom_init_uart_base();
+#endif
 }
 
 void __init prom_free_prom_memory(void)

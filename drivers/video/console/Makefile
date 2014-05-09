@@ -2,6 +2,7 @@
 # 5 Aug 1999, James Simmons, <mailto:jsimmons@users.sf.net>
 # Rewritten to use lists instead of if-statements.
 
+# Font handling
 obj-$(CONFIG_DUMMY_CONSOLE)       += dummycon.o
 obj-$(CONFIG_SGI_NEWPORT_CONSOLE) += newport_con.o
 obj-$(CONFIG_STI_CONSOLE)         += sticon.o sticore.o
@@ -16,4 +17,5 @@ obj-$(CONFIG_FRAMEBUFFER_CONSOLE)     += fbcon_rotate.o fbcon_cw.o fbcon_ud.o \
                                          fbcon_ccw.o
 endif
 
+obj-$(CONFIG_FB_CON_DECOR)           += fbcondecor.o cfbcondecor.o
 obj-$(CONFIG_FB_STI)              += sticore.o

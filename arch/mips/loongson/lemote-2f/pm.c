@@ -140,10 +140,10 @@ int wakeup_loongson(void)
 
 void __weak mach_suspend(void)
 {
-	disable_mfgpt0_counter();
+	disable_mfgpt_counter();
 }
 
 void __weak mach_resume(void)
 {
-	enable_mfgpt0_counter();
+	enable_mfgpt_counter();
 }

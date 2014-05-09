@@ -702,7 +702,7 @@ again:
 out:
 	srcu_read_unlock(&vcpu->kvm->srcu, idx);
 	if (r > 0) {
-		cond_resched();
+		schedule();
 		idx = srcu_read_lock(&vcpu->kvm->srcu);
 		goto again;
 	}

@@ -5022,8 +5022,10 @@ static const char * const tpacpi_led_names[TPACPI_LED_NUMLEDS] = {
 	"tpacpi::unknown_led2",
 	"tpacpi::unknown_led3",
 	"tpacpi::thinkvantage",
+	"tpacpi::unknown_led4",
+	"tpacpi::micmute",
 };
-#define TPACPI_SAFE_LEDS	0x1081U
+#define TPACPI_SAFE_LEDS	0x5081U
 
 static inline bool tpacpi_is_led_restricted(const unsigned int led)
 {
@@ -5246,7 +5248,7 @@ static const struct tpacpi_quirk led_useful_qtable[] __initconst = {
 	{ /* Lenovo */
 	  .vendor = PCI_VENDOR_ID_LENOVO,
 	  .bios = TPACPI_MATCH_ANY, .ec = TPACPI_MATCH_ANY,
-	  .quirks = 0x1fffU,
+	  .quirks = 0x5fffU,
 	},
 	{ /* IBM ThinkPads with no EC version string */
 	  .vendor = PCI_VENDOR_ID_IBM,

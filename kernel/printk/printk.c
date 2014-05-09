@@ -59,7 +59,7 @@
 
 /* We show everything that is MORE important than this.. */
 #define MINIMUM_CONSOLE_LOGLEVEL 1 /* Minimum loglevel we let people use */
-#define DEFAULT_CONSOLE_LOGLEVEL 7 /* anything MORE serious than KERN_DEBUG */
+#define DEFAULT_CONSOLE_LOGLEVEL 4 /* anything MORE serious than KERN_WARNING */
 
 int console_printk[4] = {
 	DEFAULT_CONSOLE_LOGLEVEL,	/* console_loglevel */
@@ -1277,7 +1277,7 @@ static void call_console_drivers(int level, const char *text, size_t len)
 		if (!cpu_online(smp_processor_id()) &&
 		    !(con->flags & CON_ANYTIME))
 			continue;
-		con->write(con, text, len);
+		con->write(con, text, len, level);
 	}
 }
 
@@ -1730,7 +1730,7 @@ void early_vprintk(const char *fmt, va_list ap)
 		char buf[512];
 		int n = vscnprintf(buf, sizeof(buf), fmt, ap);
 
-		early_console->write(early_console, buf, n);
+		early_console->write(early_console, buf, n, 0);
 	}
 }
 

@@ -6,6 +6,8 @@ menu "Character devices"
 
 source "drivers/tty/Kconfig"
 
+source "drivers/char/kcopy/Kconfig"
+
 config DEVKMEM
 	bool "/dev/kmem virtual device support"
 	default y

@@ -32,17 +32,13 @@ extern void __init prom_init_memory(void);
 extern void __init prom_init_cmdline(void);
 extern void __init prom_init_machtype(void);
 extern void __init prom_init_env(void);
-#ifdef CONFIG_LOONGSON_UART_BASE
-extern unsigned long _loongson_uart_base, loongson_uart_base;
-extern void prom_init_loongson_uart_base(void);
-#endif
+extern void __init prom_init_uart_base(void);
 
-static inline void prom_init_uart_base(void)
-{
-#ifdef CONFIG_LOONGSON_UART_BASE
-	prom_init_loongson_uart_base();
-#endif
-}
+/*
+ * Copy kernel command line from arcs_cmdline
+ */
+#include <asm/setup.h>
+extern char loongson_cmdline[COMMAND_LINE_SIZE];
 
 /* irq operation functions */
 extern void bonito_irqdispatch(void);
@@ -249,6 +245,12 @@ extern struct cpufreq_frequency_table loongson2_clockmod_table[];
 
 /* Chip Config */
 #define LOONGSON_CHIPCFG0		LOONGSON_REG(LOONGSON_REGBASE + 0x80)
+#define LOONGSON_GET_CPUFREQ()		(LOONGSON_CHIPCFG0 & 7)
+
+#define LOONGSON_SET_CPUFREQ(level)	do { \
+	LOONGSON_CHIPCFG0 = (LOONGSON_CHIPCFG0 & (~7)) | (level); \
+} while (0)
+
 #endif
 
 /*

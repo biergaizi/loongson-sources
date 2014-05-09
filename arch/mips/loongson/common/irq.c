@@ -10,6 +10,10 @@
 #include <linux/delay.h>
 #include <linux/interrupt.h>
 
+#include <asm/irq_cpu.h>
+#include <asm/i8259.h>
+#include <asm/mipsregs.h>
+
 #include <loongson.h>
 /*
  * the first level int-handler will jump here if it is a bonito irq
@@ -48,19 +52,31 @@ asmlinkage void plat_irq_dispatch(void)
 void __init arch_init_irq(void)
 {
 	/*
-	 * Clear all of the interrupts while we change the able around a bit.
-	 * int-handler is not on bootstrap
+	 * The vector addresses of the generic exceptions are in the cached
+	 * address space.
 	 */
-	clear_c0_status(ST0_IM | ST0_BEV);
+	clear_c0_status(ST0_BEV);
 
-	/* no steer */
+	/* No steer */
 	LOONGSON_INTSTEER = 0;
 
 	/*
-	 * Mask out all interrupt by writing "1" to all bit position in
-	 * the interrupt reset reg.
+	 * Clear all interrupts
 	 */
 	LOONGSON_INTENCLR = ~0;
+
+	/*
+	 * Sets the first-level interrupt dispatcher:
+	 *
+	 * 0-15: i8259 interrupt (If CONFIG_I8259 selected)
+	 * 16-23: mips cpu interrupt
+	 * 32-63: bonito irq
+	 */
+	mips_cpu_irq_init();
+	bonito_irq_init();
+#ifdef CONFIG_I8259
+	init_i8259_irqs();
+#endif
 
 	/* machine specific irq init */
 	mach_init_irq();
