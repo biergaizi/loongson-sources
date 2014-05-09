@@ -1,5 +1,5 @@
---- a/Kconfig
-+++ b/Kconfig
+--- a/Kconfig	2014-04-02 09:45:05.389224541 -0400
++++ b/Kconfig	2014-04-02 09:45:39.269224273 -0400
 @@ -8,4 +8,6 @@ config SRCARCH
  	string
  	option env="SRCARCH"
@@ -7,9 +7,9 @@
 +source "distro/Kconfig"
 +
  source "arch/$SRCARCH/Kconfig"
---- /dev/null
-+++ b/distro/Kconfig
-@@ -0,0 +1,107 @@
+--- 	1969-12-31 19:00:00.000000000 -0500
++++ b/distro/Kconfig	2014-04-02 09:57:03.539218861 -0400
+@@ -0,0 +1,108 @@
 +menu "Gentoo Linux"
 +
 +config GENTOO_LINUX
@@ -92,6 +92,7 @@
 +	select FHANDLE
 +	select INOTIFY_USER
 +	select NET
++	select NET_NS 
 +	select PROC_FS
 +	select SIGNALFD
 +	select SYSFS
