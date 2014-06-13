@@ -62,33 +62,17 @@ Patch:  1004_linux-3.14.5.patch
 From:   http://www.kernel.org
 Desc:   Linux 3.14.5
 
+Patch:  1005_linux-3.14.6.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.14.6
+
+Patch:  1006_linux-3.14.7.patch
+From:   http://www.kernel.org
+Desc:   Linux 3.14.7
+
 Patch:  1500_XATTR_USER_PREFIX.patch
 From:   https://bugs.gentoo.org/show_bug.cgi?id=470644
 Desc:   Support for namespace user.pax.* on tmpfs.
-
-Patch:  1501-futex-add-another-early-deadlock-detection-check.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=866293ee54227584ffcb4a42f69c1f365974ba7f
-Desc:   CVE-2014-3153
-
-Patch:  1502-futex-prevent-attaching-to-kernel-threads.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=f0d71b3dcb8332f7971b5f2363632573e6d9486a
-Desc:   CVE-2014-3153
-
-Patch:  1503-futex-prevent-requeue-pi-on-same-futex-patch-futex-forbid-uaddr-uaddr2-in-futex_requeue-requeue_pi-1.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=e9c243a5a6de0be8e584c604d353412584b592f8
-Desc:   CVE-2014-3153
-
-Patch:  1504-futex-validate-atomic-acquisition-in-futex_lock_pi_atomic.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=b3eaa9fc5cd0a4d74b18f6b8dc617aeaf1873270
-Desc:   CVE-2014-3153
-
-Patch:  1505-futex-always-cleanup-owner-tid-in-unlock_pi.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=13fbca4c6ecd96ec1a1cfa2e4f2ce191fe928a5e
-Desc:   CVE-2014-3153
-
-Patch:  1506-futex-make-lookup_pi_state-more-robust.patch
-From:   https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=54a217887a7b658e2650c3feff22756ab80c7339
-Desc:   CVE-2014-3153
 
 Patch:  1700_enable-thinkpad-micled.patch
 From:   https://bugs.gentoo.org/show_bug.cgi?id=449248
@@ -113,6 +97,10 @@ Desc:   Do not lock when UMH is waiting on current thread spawned by linuxrc. (b
 Patch:  4200_fbcondecor-0.9.6.patch
 From:   http://dev.gentoo.org/~spock
 Desc:   Bootsplash successor by Michal Januszewski ported by Jeremy (bug #452574)
+
+Patch:  4400_fs-userns-change-inode_capable-to-capable_wrt_inode_uidgid.patch
+From:   https://bugs.gentoo.org/show_bug.cgi?id=512980
+Desc:   Change inode_capable to capable_wrt_inode_uidgid, fixes CVE-2014-4014
 
 Patch:  4500_support-for-pogoplug-e02.patch
 From:   Cristoph Junghans <ottxor@gentoo.org>
