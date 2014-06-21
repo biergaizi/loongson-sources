@@ -439,7 +439,7 @@ EXPORT_SYMBOL(capable);
  *
  * Return true if the current task has the given capability targeted at
  * its own user namespace and that the given inode's uid and gid are
- * mapped into the current user namespace
+ * mapped into the current user namespace.
  */
 bool capable_wrt_inode_uidgid(const struct inode *inode, int cap)
 {

@@ -1841,7 +1841,7 @@ EXPORT_SYMBOL(inode_init_owner);
  * @inode: inode being checked
  *
  * Return true if current either has CAP_FOWNER in a namespace with the
- * inode owner uid mapped, or owns the file
+ * inode owner uid mapped, or owns the file.
  */
 bool inode_owner_or_capable(const struct inode *inode)
 {
