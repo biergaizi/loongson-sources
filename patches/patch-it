@@ -1,10 +1,10 @@
 #!/bin/bash
 
 for file in `tree -if --noreport | egrep "\.(patch|patch1|diff)$"`; do
-    echo Apply $file > /dev/null
+    echo Apply $file
     patch -p1 < $file
     if [ $? != 0 ]; then
-        echo "Failed"
+        echo "Failed to patch $file"
         exit 1
     fi
 done

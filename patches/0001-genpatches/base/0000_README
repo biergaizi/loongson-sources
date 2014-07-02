@@ -42,37 +42,18 @@ EXPERIMENTAL
 
 Individual Patch Descriptions:
 --------------------------------------------------------------------------
-Patch:  1000_linux-3.14.1.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.14.1
 
-Patch:  1001_linux-3.14.2.patch
+Patch:  1000_linux-3.15.1.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.14.2
+Desc:   Linux 3.15.1
 
-Patch:  1002_linux-3.14.3.patch
+Patch:  1001_linux-3.15.2.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.14.3
+Desc:   Linux 3.15.2
 
-Patch:  1003_linux-3.14.4.patch
+Patch:  1002_linux-3.15.3.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.14.4
-
-Patch:  1004_linux-3.14.5.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.14.5
-
-Patch:  1005_linux-3.14.6.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.14.6
-
-Patch:  1006_linux-3.14.7.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.14.7
-
-Patch:  1500_XATTR_USER_PREFIX.patch
-From:   https://bugs.gentoo.org/show_bug.cgi?id=470644
-Desc:   Support for namespace user.pax.* on tmpfs.
+Desc:   Linux 3.15.3
 
 Patch:  1700_enable-thinkpad-micled.patch
 From:   https://bugs.gentoo.org/show_bug.cgi?id=449248
@@ -90,17 +71,13 @@ Patch:  2900_dev-root-proc-mount-fix.patch
 From:   https://bugs.gentoo.org/show_bug.cgi?id=438380
 Desc:   Ensure that /dev/root doesn't appear in /proc/mounts when bootint without an initramfs.
 
-Patch:  2900_s2disk-resume-image-fix.patch
+Patch:  2905_s2disk-resume-image-fix.patch
 From:   Al Viro <viro <at> ZenIV.linux.org.uk>
 Desc:   Do not lock when UMH is waiting on current thread spawned by linuxrc. (bug #481344)
 
-Patch:  4200_fbcondecor-0.9.6.patch
-From:   http://dev.gentoo.org/~spock
-Desc:   Bootsplash successor by Michal Januszewski ported by Jeremy (bug #452574)
-
-Patch:  4400_fs-userns-change-inode_capable-to-capable_wrt_inode_uidgid.patch
-From:   https://bugs.gentoo.org/show_bug.cgi?id=512980
-Desc:   Change inode_capable to capable_wrt_inode_uidgid, fixes CVE-2014-4014
+Patch:  4200_fbcondecor-3.15.patch
+From:   http://www.mepiscommunity.org/fbcondecor
+Desc:   Bootsplash ported by Uladzimir Bely (bug #513334)
 
 Patch:  4500_support-for-pogoplug-e02.patch
 From:   Cristoph Junghans <ottxor@gentoo.org>
@@ -114,15 +91,14 @@ Patch:  5000_enable-additional-cpu-optimizations-for-gcc.patch
 From:   https://github.com/graysky2/kernel_gcc_patch/
 Desc:   Kernel patch enables gcc optimizations for additional CPUs.
 
-Patch:  5001_BFQ-1-block-cgroups-kconfig-build-bits-for-v7r2-3.14.patch
+Patch:  5001_BFQ-1-block-cgroups-kconfig-build-bits-for-v7r4-3.15.patch
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
 Desc:   BFQ v7r2 patch 1 for 3.14: Build, cgroups and kconfig bits
 
-Patch:  5002_BFQ-2-block-introduce-the-v7r2-I-O-sched-for-3.14.patch1
+Patch:  5002_BFQ-2-block-introduce-the-v7r4-I-O-sched-for-3.15.patch1
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
 Desc:   BFQ v7r2 patch 2 for 3.14: BFQ Scheduler
 
-Patch:  5003_BFQ-3-block-add-Early-Queue-Merge-EQM-v7r2-for-3.14.0.patch
+Patch:  5003_BFQ-3-block-add-Early-Queue-Merge-EQM-v7r4-for-3.15.0.patch
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
 Desc:   BFQ v7r2 patch 3 for 3.14: Early Queue Merge (EQM)
-

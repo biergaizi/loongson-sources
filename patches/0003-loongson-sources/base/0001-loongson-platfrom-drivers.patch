@@ -1,15 +1,11 @@
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-02-03 18:29:00.606709211 +0800
-@@ -299,7 +299,42 @@ extern void _wrmsr(u32 msr, u32 hi, u32
- 
- /****************** NATIVE ***************************/
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-07-03 06:09:49.000000000 +0800
+@@ -301,5 +301,40 @@ extern void _wrmsr(u32 msr, u32 hi, u32
  /* GPIO : I/O SPACE; REG : 32BITS */
--#define GPIOL_OUT_VAL		0x00
--#define GPIOL_OUT_EN		0x04
-+#define	GPIOL_OUT_VAL		0x00
-+#define	GPIOL_OUT_EN		0x04
-+#define	GPIOL_OUT_AUX1_SEL	0x10
+ #define GPIOL_OUT_VAL		0x00
+ #define GPIOL_OUT_EN		0x04
++#define GPIOL_OUT_AUX1_SEL	0x10
 +/* SMB : I/O SPACE, REG : 8BITS WIDTH */
 +#define	SMB_SDA			0x00
 +#define	SMB_STS			0x01
@@ -46,189 +42,49 @@ diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-
 +#define	SMB_CTRL3		0x06
  
  #endif				/* _CS5536_H */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-02-03 18:29:00.606709211 +0800
-@@ -10,26 +10,45 @@
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-07-03 06:09:49.000000000 +0800
+@@ -28,8 +28,19 @@ static inline void __maybe_unused enable
+ #define COMPARE	 ((MFGPT_TICK_RATE + HZ/2) / HZ)
  
- #ifdef CONFIG_CS5536_MFGPT
- extern void setup_mfgpt0_timer(void);
--extern void disable_mfgpt0_counter(void);
--extern void enable_mfgpt0_counter(void);
-+extern void disable_mfgpt_counter(void);
-+extern void enable_mfgpt_counter(void);
- #else
- static inline void __maybe_unused setup_mfgpt0_timer(void)
- {
- }
--static inline void __maybe_unused disable_mfgpt0_counter(void)
-+static inline void __maybe_unused disable_mfgpt_counter(void)
- {
- }
--static inline void __maybe_unused enable_mfgpt0_counter(void)
-+static inline void __maybe_unused enable_mfgpt_counter(void)
- {
- }
- #endif
+ #define MFGPT_BASE	mfgpt_base
++#define MFGPT0_CMP1	(MFGPT_BASE + 0)
+ #define MFGPT0_CMP2	(MFGPT_BASE + 2)
+ #define MFGPT0_CNT	(MFGPT_BASE + 4)
+ #define MFGPT0_SETUP	(MFGPT_BASE + 6)
  
--#define MFGPT_TICK_RATE 14318000
--#define COMPARE	 ((MFGPT_TICK_RATE + HZ/2) / HZ)
-+#define MFGPT_CLK_RATE(c)		((14318000UL-32768)*c + 32768)
-+#define MFGPT_TICK_RATE(c, scale)	(MFGPT_CLK_RATE(c) / (1 << scale))
-+#define MFGPT_COMPARE(c, scale)		((MFGPT_TICK_RATE(c, scale)+HZ/2)/HZ)
- 
--#define MFGPT_BASE	mfgpt_base
--#define MFGPT0_CMP2	(MFGPT_BASE + 2)
--#define MFGPT0_CNT	(MFGPT_BASE + 4)
--#define MFGPT0_SETUP	(MFGPT_BASE + 6)
-+#define MFGPT_SETUP_ENABLE		(1 << 15)
-+#define MFGPT_SETUP_ACK			(3 << 13)
-+#define MFGPT_SETUP_SETUP		(1 << 12)
-+#define MFGPT_SETUP_CMP2EVT		(3 <<  8)
-+#define MFGPT_SETUP_CMP1EVT		(3 <<  6)
-+#define MFGPT_SETUP_CLOCK(c)		(c <<  4)
-+#define MFGPT_SETUP_SCALE(scale)	scale
++#define MFGPT1_CMP1	(MFGPT_BASE + 0x08)
++#define MFGPT1_CMP2	(MFGPT_BASE + 0x0A)
++#define MFGPT1_CNT	(MFGPT_BASE + 0x0C)
++#define MFGPT1_SETUP	(MFGPT_BASE + 0x0E)
 +
-+#define MFGPT0_CMP1	mfgpt_base
-+#define MFGPT0_CMP2	(mfgpt_base + 0x02)
-+#define MFGPT0_CNT	(mfgpt_base + 0x04)
-+#define MFGPT0_SETUP	(mfgpt_base + 0x06)
++#define MFGPT2_CMP1	(MFGPT_BASE + 0x10)
++#define MFGPT2_CMP2	(MFGPT_BASE + 0x12)
++#define MFGPT2_CNT	(MFGPT_BASE + 0x14)
++#define MFGPT2_SETUP	(MFGPT_BASE + 0x16)
 +
-+#define MFGPT1_CMP1	(mfgpt_base + 0x08)
-+#define MFGPT1_CMP2	(mfgpt_base + 0x0A)
-+#define MFGPT1_CNT	(mfgpt_base + 0x0C)
-+#define MFGPT1_SETUP	(mfgpt_base + 0x0E)
-+
-+#define MFGPT2_CMP1	(mfgpt_base + 0x10)
-+#define MFGPT2_CMP2	(mfgpt_base + 0x12)
-+#define MFGPT2_CNT	(mfgpt_base + 0x14)
-+#define MFGPT2_SETUP	(mfgpt_base + 0x16)
- 
  #endif /*!_CS5536_MFGPT_H */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_pci.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_pci.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_pci.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_pci.h	2014-02-03 18:29:00.606709211 +0800
-@@ -13,6 +13,7 @@
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/loongson.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/loongson.h	2014-07-03 06:09:49.000000000 +0800
+@@ -46,6 +46,12 @@ static inline void prom_init_uart_base(v
+ #endif
+ }
  
- #include <linux/types.h>
- #include <linux/pci_regs.h>
-+#include <linux/pci_ids.h>
- 
- extern void cs5536_pci_conf_write4(int function, int reg, u32 value);
- extern u32 cs5536_pci_conf_read4(int function, int reg);
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_vsm.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_vsm.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/cs5536/cs5536_vsm.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_vsm.h	2014-02-03 18:29:00.606709211 +0800
-@@ -17,15 +17,43 @@ typedef u32 (*cs5536_pci_vsm_read)(int r
- extern void pci_##name##_write_reg(int reg, u32 value); \
- extern u32 pci_##name##_read_reg(int reg);
- 
-+#define DEFINE_CS5536_MODULE(name) \
-+static void pci_##name##_write_reg(int reg, u32 value) {} \
-+static u32 pci_##name##_read_reg(int reg) { return 0; }
-+
-+/* isa module */
-+#ifdef CONFIG_CS5536_ISA
-+DECLARE_CS5536_MODULE(isa)
-+#else
-+DEFINE_CS5536_MODULE(isa)
-+#endif
-+
- /* ide module */
-+#ifdef CONFIG_CS5536_IDE
- DECLARE_CS5536_MODULE(ide)
-+#else
-+DEFINE_CS5536_MODULE(ide)
-+#endif
-+
- /* acc module */
-+#ifdef CONFIG_CS5536_AUDIO
- DECLARE_CS5536_MODULE(acc)
-+#else
-+DEFINE_CS5536_MODULE(acc)
-+#endif
-+
- /* ohci module */
-+#ifdef CONFIG_CS5536_OHCI
- DECLARE_CS5536_MODULE(ohci)
--/* isa module */
--DECLARE_CS5536_MODULE(isa)
-+#else
-+DEFINE_CS5536_MODULE(ohci)
-+#endif
-+
- /* ehci module */
-+#ifdef CONFIG_CS5536_EHCI
- DECLARE_CS5536_MODULE(ehci)
-+#else
-+DEFINE_CS5536_MODULE(ehci)
-+#endif
- 
- #endif				/* _CS5536_VSM_H */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/gpio.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/gpio.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/gpio.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/gpio.h	2014-02-03 18:29:00.606709211 +0800
-@@ -13,12 +13,16 @@
- #ifndef __STLS2F_GPIO_H
- #define __STLS2F_GPIO_H
- 
-+#ifdef CONFIG_GPIOLIB
-+#define ARCH_NR_GPIOS 4
- #include <asm-generic/gpio.h>
- 
- extern void gpio_set_value(unsigned gpio, int value);
- extern int gpio_get_value(unsigned gpio);
- extern int gpio_cansleep(unsigned gpio);
- 
-+#endif
-+
- /* The chip can do interrupt
-  * but it has not been tested and doc not clear
-  */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/loongson.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/loongson.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/loongson.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/loongson.h	2014-02-03 18:29:00.606709211 +0800
-@@ -32,17 +32,13 @@ extern void __init prom_init_memory(void
- extern void __init prom_init_cmdline(void);
- extern void __init prom_init_machtype(void);
- extern void __init prom_init_env(void);
--#ifdef CONFIG_LOONGSON_UART_BASE
--extern unsigned long _loongson_uart_base, loongson_uart_base;
--extern void prom_init_loongson_uart_base(void);
--#endif
-+extern void __init prom_init_uart_base(void);
- 
--static inline void prom_init_uart_base(void)
--{
--#ifdef CONFIG_LOONGSON_UART_BASE
--	prom_init_loongson_uart_base();
--#endif
--}
 +/*
 + * Copy kernel command line from arcs_cmdline
 + */
 +#include <asm/setup.h>
 +extern char loongson_cmdline[COMMAND_LINE_SIZE];
- 
++
  /* irq operation functions */
  extern void bonito_irqdispatch(void);
-@@ -249,6 +245,12 @@ extern struct cpufreq_frequency_table lo
- 
- /* Chip Config */
- #define LOONGSON_CHIPCFG0		LOONGSON_REG(LOONGSON_REGBASE + 0x80)
-+#define LOONGSON_GET_CPUFREQ()		(LOONGSON_CHIPCFG0 & 7)
-+
-+#define LOONGSON_SET_CPUFREQ(level)	do { \
-+	LOONGSON_CHIPCFG0 = (LOONGSON_CHIPCFG0 & (~7)) | (level); \
-+} while (0)
-+
- #endif
- 
- /*
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/machine.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson/machine.h
---- linux-3.13/arch/mips/include/asm/mach-loongson/machine.h	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson/machine.h	2014-02-03 18:29:00.607709245 +0800
-@@ -24,4 +24,10 @@
+ extern void __init bonito_irq_init(void);
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/machine.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/machine.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson/machine.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/machine.h	2014-07-03 06:09:49.000000000 +0800
+@@ -24,6 +24,12 @@
  
  #endif
  
@@ -238,10 +94,12 @@ diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson/machine.h linux-3.13-l
 +
 +#endif
 +
- #endif /* __ASM_MACH_LOONGSON_MACHINE_H */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson1/clock.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson1/clock.h
---- linux-3.13/arch/mips/include/asm/mach-loongson1/clock.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson1/clock.h	2014-02-03 18:28:58.478635817 +0800
+ #ifdef CONFIG_LEMOTE_MACH3A
+ 
+ #define LOONGSON_MACHTYPE MACH_LEMOTE_A1101
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/clock.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/clock.h	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,53 @@
 +#ifndef __ASM_MACH_LOONGSON1_CLOCK_H
 +#define __ASM_MACH_LOONGSON1_CLOCK_H
@@ -296,9 +154,9 @@ diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson1/clock.h linux-3.13-lo
 +void clk_unregister(struct clk *);
 +
 +#endif				/* __ASM_MIPS_CLOCK_H */
-diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.13-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h
---- linux-3.13/arch/mips/include/asm/mach-loongson1/regs-intc.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h	2014-02-03 18:28:58.479635852 +0800
+diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h
+--- linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,25 @@
 +/*
 + * Copyright (c) 2011 Zhang, Keguang <keguang.zhang@gmail.com>
@@ -325,9 +183,9 @@ diff -uprN linux-3.13/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.1
 +#define LS1X_INTC_INTEDGE(n)		LS1X_INTC_REG(n, 0x14)
 +
 +#endif /* __ASM_MACH_LOONGSON1_REGS_INTC_H */
-diff -uprN linux-3.13/arch/mips/loongson/common/cmdline.c linux-3.13-loongson/arch/mips/loongson/common/cmdline.c
---- linux-3.13/arch/mips/loongson/common/cmdline.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/cmdline.c	2014-02-03 18:28:49.375321862 +0800
+diff -uprN linux-3.15/arch/mips/loongson/common/cmdline.c linux-3.15-loongson/arch/mips/loongson/common/cmdline.c
+--- linux-3.15/arch/mips/loongson/common/cmdline.c	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/common/cmdline.c	2014-07-03 06:09:49.000000000 +0800
 @@ -17,10 +17,15 @@
   * Free Software Foundation;  either version 2 of the  License, or (at your
   * option) any later version.
@@ -376,917 +234,9 @@ diff -uprN linux-3.13/arch/mips/loongson/common/cmdline.c linux-3.13-loongson/ar
 +	/* copy arcs_cmdline into loongson_cmdline */
 +	strncpy(loongson_cmdline, arcs_cmdline, COMMAND_LINE_SIZE);
  }
-diff -uprN linux-3.13/arch/mips/loongson/common/cs5536/cs5536_mfgpt.c linux-3.13-loongson/arch/mips/loongson/common/cs5536/cs5536_mfgpt.c
---- linux-3.13/arch/mips/loongson/common/cs5536/cs5536_mfgpt.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/cs5536/cs5536_mfgpt.c	2014-02-03 18:28:49.375321862 +0800
-@@ -7,6 +7,9 @@
-  * Copyright (C) 2009 Lemote Inc.
-  * Author: Wu zhangjin, wuzhangjin@gmail.com
-  *
-+ * Copyright (C) 2010 Lemote Inc.
-+ * Author: Gang Liang, randomizedthinking@gmail.com
-+ *
-  * Reference: AMD Geode(TM) CS5536 Companion Device Data Book
-  *
-  *  This program is free software; you can redistribute	 it and/or modify it
-@@ -15,11 +18,24 @@
-  *  option) any later version.
-  */
- 
-+/*
-+ * The MFGPT base address is variable, i.e., it could change over time. In
-+ * reality, it only changes once when setting up the PCI memory mapping (occurs
-+ * about 0.2 second from boot).  But because of this, we have to read in the
-+ * mfgpt base address repeatly in the beginning of various routines, most
-+ * noticeably, mfgpt1_read_cycle (for sched_clock), and mfgpt1_interrupt.
-+ *
-+ * The source of problem is that PMON and the current cs5536 set up pci
-+ * register window differently (to be further confirmed). Can we set
-+ * them the same so as to save the trouble here?
-+ *
-+ * Now an ugly hack is used to save a few CPU cycles... likely an
-+ * over-optimization. Feel free to remove it.
-+ */
-+
- #include <linux/io.h>
- #include <linux/init.h>
- #include <linux/module.h>
--#include <linux/jiffies.h>
--#include <linux/spinlock.h>
- #include <linux/interrupt.h>
- #include <linux/clockchips.h>
- 
-@@ -27,108 +43,143 @@
- 
- #include <cs5536/cs5536_mfgpt.h>
- 
--DEFINE_SPINLOCK(mfgpt_lock);
--EXPORT_SYMBOL(mfgpt_lock);
-+static void mfgpt0_set_mode(enum clock_event_mode, struct clock_event_device*);
-+static int mfgpt0_next_event(unsigned long, struct clock_event_device*);
-+static irqreturn_t mfgpt0_interrupt(int irq, void *dev_id);
-+static void mfgpt0_start_timer(u16 delta);
- 
-+static cycle_t mfgpt1_read_cycle(struct clocksource *cs);
-+
-+static enum clock_event_mode mfgpt0_mode = CLOCK_EVT_MODE_SHUTDOWN;
- static u32 mfgpt_base;
- 
--/*
-- * Initialize the MFGPT timer.
-- *
-- * This is also called after resume to bring the MFGPT into operation again.
-- */
-+static struct clock_event_device mfgpt0_clockevent = {
-+	.name = "mfgpt0",
-+	.features = CLOCK_EVT_MODE_ONESHOT | CLOCK_EVT_FEAT_PERIODIC,
-+	.set_mode = mfgpt0_set_mode,
-+	.set_next_event = mfgpt0_next_event,
-+	.rating = 220,
-+	.irq = CS5536_MFGPT_INTR,
-+};
-+
-+static struct irqaction irq5 = {
-+	.handler = mfgpt0_interrupt,
-+	.flags = IRQF_DISABLED | IRQF_NOBALANCING | IRQF_TIMER,
-+	.name = "mfgpt0-timer"
-+};
- 
--/* disable counter */
--void disable_mfgpt0_counter(void)
-+static struct clocksource mfgpt1_clocksource = {
-+	.name = "mfgpt1",
-+	.rating = 210,
-+	.read = mfgpt1_read_cycle,
-+	.mask = CLOCKSOURCE_MASK(16),
-+	.flags = CLOCK_SOURCE_IS_CONTINUOUS
-+};
-+
-+static inline void enable_mfgpt0_counter(void)
- {
--	outw(inw(MFGPT0_SETUP) & 0x7fff, MFGPT0_SETUP);
-+	u32 basehi;
-+	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
-+
-+	/* clockevent: 14M, divisor = 8 (scale=3), CMP2 event mode */
-+	outw(MFGPT_SETUP_ACK | MFGPT_SETUP_CMP2EVT |
-+	     MFGPT_SETUP_CLOCK(1) | MFGPT_SETUP_SCALE(3), MFGPT0_SETUP);
-+	outw(0, MFGPT0_CNT);
-+	outw(MFGPT_COMPARE(1, 3), MFGPT0_CMP2);
-+	outw(0xFFFF, MFGPT0_SETUP);
- }
--EXPORT_SYMBOL(disable_mfgpt0_counter);
- 
--/* enable counter, comparator2 to event mode, 14.318MHz clock */
--void enable_mfgpt0_counter(void)
-+static inline void enable_mfgpt1_counter(void)
- {
--	outw(0xe310, MFGPT0_SETUP);
-+	u32 basehi;
-+	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
-+
-+	/* clocksource: 32K w/ divisor = 2 (scale=1) */
-+	outw(MFGPT_SETUP_ACK | MFGPT_SETUP_CLOCK(0) |
-+		MFGPT_SETUP_SCALE(1), MFGPT1_SETUP);
-+
-+	outw(0, MFGPT1_CNT);
-+	outw(0xFFFF, MFGPT1_CMP2);  /* CNT won't tick with no CMP set */
-+	outw(0xFFFF, MFGPT1_SETUP);
- }
--EXPORT_SYMBOL(enable_mfgpt0_counter);
- 
--static void init_mfgpt_timer(enum clock_event_mode mode,
--			     struct clock_event_device *evt)
-+void enable_mfgpt_counter(void)
- {
--	spin_lock(&mfgpt_lock);
-+	/* TODO: add a mfgpt system hard reset here
-+	 * timers might not reset correctly when OS crashes
-+	 */
- 
--	switch (mode) {
--	case CLOCK_EVT_MODE_PERIODIC:
--		outw(COMPARE, MFGPT0_CMP2);	/* set comparator2 */
--		outw(0, MFGPT0_CNT);	/* set counter to 0 */
--		enable_mfgpt0_counter();
--		break;
-+	enable_mfgpt0_counter();
-+	enable_mfgpt1_counter();
-+}
-+EXPORT_SYMBOL(enable_mfgpt_counter);
- 
--	case CLOCK_EVT_MODE_SHUTDOWN:
--	case CLOCK_EVT_MODE_UNUSED:
--		if (evt->mode == CLOCK_EVT_MODE_PERIODIC ||
--		    evt->mode == CLOCK_EVT_MODE_ONESHOT)
--			disable_mfgpt0_counter();
--		break;
-+void disable_mfgpt_counter(void)
-+{
-+	outw(0x7FFF, MFGPT0_SETUP);
-+	outw(0x7FFF, MFGPT1_SETUP);
-+}
-+EXPORT_SYMBOL(disable_mfgpt_counter);
- 
--	case CLOCK_EVT_MODE_ONESHOT:
--		/* The oneshot mode have very high deviation, Not use it! */
--		break;
-+static void mfgpt0_start_timer(u16 delta)
-+{
-+	outw(0x7FFF, MFGPT0_SETUP);
-+	outw(0,      MFGPT0_CNT);
-+	outw(delta,  MFGPT0_CMP2);
-+	outw(0xFFFF, MFGPT0_SETUP);
-+}
- 
--	case CLOCK_EVT_MODE_RESUME:
--		/* Nothing to do here */
--		break;
--	}
--	spin_unlock(&mfgpt_lock);
-+static void mfgpt0_set_mode(enum clock_event_mode mode,
-+		struct clock_event_device *evt)
-+{
-+	outw(0x7FFF, MFGPT0_SETUP);
-+	if (mode == CLOCK_EVT_MODE_PERIODIC)
-+		mfgpt0_start_timer(MFGPT_COMPARE(1, 3));
-+
-+	mfgpt0_mode = mode;
- }
- 
--static struct clock_event_device mfgpt_clockevent = {
--	.name = "mfgpt",
--	.features = CLOCK_EVT_FEAT_PERIODIC,
--	.set_mode = init_mfgpt_timer,
--	.irq = CS5536_MFGPT_INTR,
--};
-+static int mfgpt0_next_event(unsigned long delta,
-+		struct clock_event_device *evt)
-+{
-+	mfgpt0_start_timer(delta);
-+	return 0;
-+}
- 
--static irqreturn_t timer_interrupt(int irq, void *dev_id)
-+static irqreturn_t mfgpt0_interrupt(int irq, void *dev_id)
- {
- 	u32 basehi;
--
--	/*
--	 * get MFGPT base address
--	 *
--	 * NOTE: do not remove me, it's need for the value of mfgpt_base is
--	 * variable
--	 */
- 	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
- 
--	/* ack */
--	outw(inw(MFGPT0_SETUP) | 0x4000, MFGPT0_SETUP);
-+	/* stop the timer and ack the interrupt */
-+	outw(0x7FFF, MFGPT0_SETUP);
- 
--	mfgpt_clockevent.event_handler(&mfgpt_clockevent);
-+	if (mfgpt0_mode == CLOCK_EVT_MODE_SHUTDOWN)
-+		return IRQ_HANDLED;
- 
-+	/* restart timer for periodic mode */
-+	if (mfgpt0_mode == CLOCK_EVT_MODE_PERIODIC)
-+		outw(0xFFFF, MFGPT0_SETUP);
-+
-+	mfgpt0_clockevent.event_handler(&mfgpt0_clockevent);
- 	return IRQ_HANDLED;
- }
- 
--static struct irqaction irq5 = {
--	.handler = timer_interrupt,
--	.flags = IRQF_NOBALANCING | IRQF_TIMER,
--	.name = "timer"
--};
--
- /*
-  * Initialize the conversion factor and the min/max deltas of the clock event
-  * structure and register the clock event source with the framework.
-  */
- void __init setup_mfgpt0_timer(void)
- {
--	u32 basehi;
--	struct clock_event_device *cd = &mfgpt_clockevent;
-+	struct clock_event_device *cd = &mfgpt0_clockevent;
- 	unsigned int cpu = smp_processor_id();
--
- 	cd->cpumask = cpumask_of(cpu);
--	clockevent_set_clock(cd, MFGPT_TICK_RATE);
--	cd->max_delta_ns = clockevent_delta2ns(0xffff, cd);
--	cd->min_delta_ns = clockevent_delta2ns(0xf, cd);
-+
-+	cd->shift = 22;
-+	cd->mult  = div_sc(MFGPT_TICK_RATE(1, 3), NSEC_PER_SEC, cd->shift);
-+
-+	cd->min_delta_ns = clockevent_delta2ns(0xF, cd);
-+	cd->max_delta_ns = clockevent_delta2ns(0xFFFF, cd);
- 
- 	/* Enable MFGPT0 Comparator 2 Output to the Interrupt Mapper */
- 	_wrmsr(DIVIL_MSR_REG(MFGPT_IRQ), 0, 0x100);
-@@ -136,79 +187,24 @@ void __init setup_mfgpt0_timer(void)
- 	/* Enable Interrupt Gate 5 */
- 	_wrmsr(DIVIL_MSR_REG(PIC_ZSEL_LOW), 0, 0x50000);
- 
--	/* get MFGPT base address */
--	_rdmsr(DIVIL_MSR_REG(DIVIL_LBAR_MFGPT), &basehi, &mfgpt_base);
--
-+	enable_mfgpt0_counter();
- 	clockevents_register_device(cd);
--
- 	setup_irq(CS5536_MFGPT_INTR, &irq5);
- }
- 
--/*
-- * Since the MFGPT overflows every tick, its not very useful
-- * to just read by itself. So use jiffies to emulate a free
-- * running counter:
-- */
--static cycle_t mfgpt_read(struct clocksource *cs)
-+static cycle_t mfgpt1_read_cycle(struct clocksource *cs)
- {
--	unsigned long flags;
--	int count;
--	u32 jifs;
--	static int old_count;
--	static u32 old_jifs;
--
--	spin_lock_irqsave(&mfgpt_lock, flags);
--	/*
--	 * Although our caller may have the read side of xtime_lock,
--	 * this is now a seqlock, and we are cheating in this routine
--	 * by having side effects on state that we cannot undo if
--	 * there is a collision on the seqlock and our caller has to
--	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
--	 * jiffies as volatile despite the lock.  We read jiffies
--	 * before latching the timer count to guarantee that although
--	 * the jiffies value might be older than the count (that is,
--	 * the counter may underflow between the last point where
--	 * jiffies was incremented and the point where we latch the
--	 * count), it cannot be newer.
--	 */
--	jifs = jiffies;
--	/* read the count */
--	count = inw(MFGPT0_CNT);
--
--	/*
--	 * It's possible for count to appear to go the wrong way for this
--	 * reason:
--	 *
--	 *  The timer counter underflows, but we haven't handled the resulting
--	 *  interrupt and incremented jiffies yet.
--	 *
--	 * Previous attempts to handle these cases intelligently were buggy, so
--	 * we just do the simple thing now.
--	 */
--	if (count < old_count && jifs == old_jifs)
--		count = old_count;
--
--	old_count = count;
--	old_jifs = jifs;
--
--	spin_unlock_irqrestore(&mfgpt_lock, flags);
--
--	return (cycle_t) (jifs * COMPARE) + count;
-+	return inw(MFGPT1_CNT);
- }
- 
--static struct clocksource clocksource_mfgpt = {
--	.name = "mfgpt",
--	.rating = 120, /* Functional for real use, but not desired */
--	.read = mfgpt_read,
--	.mask = CLOCKSOURCE_MASK(32),
--};
--
--int __init init_mfgpt_clocksource(void)
-+int __init init_mfgpt1_clocksource(void)
- {
- 	if (num_possible_cpus() > 1)	/* MFGPT does not scale! */
- 		return 0;
- 
--	return clocksource_register_hz(&clocksource_mfgpt, MFGPT_TICK_RATE);
-+	enable_mfgpt1_counter();
-+
-+	return clocksource_register_hz(&mfgpt1_clocksource, MFGPT_TICK_RATE(0, 1));
- }
- 
--arch_initcall(init_mfgpt_clocksource);
-+arch_initcall(init_mfgpt1_clocksource);
-diff -uprN linux-3.13/arch/mips/loongson/common/cs5536/Makefile linux-3.13-loongson/arch/mips/loongson/common/cs5536/Makefile
---- linux-3.13/arch/mips/loongson/common/cs5536/Makefile	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/cs5536/Makefile	2014-02-03 18:28:49.375321862 +0800
-@@ -2,8 +2,13 @@
- # Makefile for CS5536 support.
- #
- 
--obj-$(CONFIG_CS5536) += cs5536_pci.o cs5536_ide.o cs5536_acc.o cs5536_ohci.o \
--			cs5536_isa.o cs5536_ehci.o
-+obj-$(CONFIG_CS5536)	+= cs5536_pci.o
-+
-+obj-$(CONFIG_ISA)		+= cs5536_isa.o
-+obj-$(CONFIG_CS5536_IDE)	+= cs5536_ide.o
-+obj-$(CONFIG_CS5536_AUDIO)	+= cs5536_acc.o
-+obj-$(CONFIG_CS5536_OHCI)	+= cs5536_ohci.o
-+obj-$(CONFIG_CS5536_EHCI)	+= cs5536_ehci.o
- 
- #
- # Enable cs5536 mfgpt Timer
-diff -uprN linux-3.13/arch/mips/loongson/common/early_printk.c linux-3.13-loongson/arch/mips/loongson/common/early_printk.c
---- linux-3.13/arch/mips/loongson/common/early_printk.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/early_printk.c	2014-02-03 18:28:49.375321862 +0800
-@@ -10,9 +10,13 @@
-  *  option) any later version.
-  */
- #include <linux/serial_reg.h>
-+#include <linux/module.h>
-+#include <asm/bootinfo.h>
- 
- #include <loongson.h>
- 
-+unsigned long _loongson_uart_base;
-+
- #define PORT(base, offset) (u8 *)(base + offset)
- 
- static inline unsigned int serial_in(unsigned char *base, int offset)
-@@ -39,3 +43,29 @@ void prom_putchar(char c)
- 
- 	serial_out(uart_base, UART_TX, c);
- }
-+
-+void __init prom_init_uart_base(void)
-+{
-+	unsigned long loongson_uart_base;
-+
-+	switch (mips_machtype) {
-+	case MACH_LEMOTE_FL2E:
-+		loongson_uart_base = LOONGSON_PCIIO_BASE + 0x3f8;
-+		break;
-+	case MACH_LEMOTE_FL2F:
-+	case MACH_LEMOTE_LL2F:
-+		loongson_uart_base = LOONGSON_PCIIO_BASE + 0x2f8;
-+		break;
-+	case MACH_LEMOTE_ML2F7:
-+	case MACH_LEMOTE_YL2F89:
-+	case MACH_DEXXON_GDIUM2F10:
-+	case MACH_LEMOTE_NAS:
-+	default:
-+		/* The CPU provided serial port */
-+		loongson_uart_base = LOONGSON_LIO1_BASE + 0x3f8;
-+		break;
-+	}
-+
-+	_loongson_uart_base =
-+		(unsigned long)ioremap_nocache(loongson_uart_base, 8);
-+}
-diff -uprN linux-3.13/arch/mips/loongson/common/init.c linux-3.13-loongson/arch/mips/loongson/common/init.c
---- linux-3.13/arch/mips/loongson/common/init.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/init.c	2014-02-03 18:28:49.375321862 +0800
-@@ -30,8 +30,10 @@ void __init prom_init(void)
- 	prom_init_env();
- 	prom_init_memory();
- 
-+#ifdef CONFIG_EARLY_PRINTK
- 	/*init the uart base address */
- 	prom_init_uart_base();
-+#endif
- }
- 
- void __init prom_free_prom_memory(void)
-diff -uprN linux-3.13/arch/mips/loongson/common/irq.c linux-3.13-loongson/arch/mips/loongson/common/irq.c
---- linux-3.13/arch/mips/loongson/common/irq.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/irq.c	2014-02-03 18:28:49.375321862 +0800
-@@ -10,6 +10,10 @@
- #include <linux/delay.h>
- #include <linux/interrupt.h>
- 
-+#include <asm/irq_cpu.h>
-+#include <asm/i8259.h>
-+#include <asm/mipsregs.h>
-+
- #include <loongson.h>
- /*
-  * the first level int-handler will jump here if it is a bonito irq
-@@ -48,20 +52,32 @@ asmlinkage void plat_irq_dispatch(void)
- void __init arch_init_irq(void)
- {
- 	/*
--	 * Clear all of the interrupts while we change the able around a bit.
--	 * int-handler is not on bootstrap
-+	 * The vector addresses of the generic exceptions are in the cached
-+	 * address space.
- 	 */
--	clear_c0_status(ST0_IM | ST0_BEV);
-+	clear_c0_status(ST0_BEV);
- 
--	/* no steer */
-+	/* No steer */
- 	LOONGSON_INTSTEER = 0;
- 
- 	/*
--	 * Mask out all interrupt by writing "1" to all bit position in
--	 * the interrupt reset reg.
-+	 * Clear all interrupts
- 	 */
- 	LOONGSON_INTENCLR = ~0;
- 
-+	/*
-+	 * Sets the first-level interrupt dispatcher:
-+	 *
-+	 * 0-15: i8259 interrupt (If CONFIG_I8259 selected)
-+	 * 16-23: mips cpu interrupt
-+	 * 32-63: bonito irq
-+	 */
-+	mips_cpu_irq_init();
-+	bonito_irq_init();
-+#ifdef CONFIG_I8259
-+	init_i8259_irqs();
-+#endif
-+
- 	/* machine specific irq init */
- 	mach_init_irq();
- }
-diff -uprN linux-3.13/arch/mips/loongson/common/Makefile linux-3.13-loongson/arch/mips/loongson/common/Makefile
---- linux-3.13/arch/mips/loongson/common/Makefile	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/Makefile	2014-02-03 18:28:49.375321862 +0800
-@@ -12,7 +12,6 @@ obj-$(CONFIG_PCI) += pci.o
- #
- obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
- obj-$(CONFIG_SERIAL_8250) += serial.o
--obj-$(CONFIG_LOONGSON_UART_BASE) += uart_base.o
- obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
- 
- #
-diff -uprN linux-3.13/arch/mips/loongson/common/mem.c linux-3.13-loongson/arch/mips/loongson/common/mem.c
---- linux-3.13/arch/mips/loongson/common/mem.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/mem.c	2014-02-03 18:28:49.375321862 +0800
-@@ -14,39 +14,24 @@
- #include <mem.h>
- #include <pci.h>
- 
-+#define MB(x) ((x) << 20)
-+
- void __init prom_init_memory(void)
- {
--	add_memory_region(0x0, (memsize << 20), BOOT_MEM_RAM);
--
--	add_memory_region(memsize << 20, LOONGSON_PCI_MEM_START - (memsize <<
--				20), BOOT_MEM_RESERVED);
--
-+	add_memory_region(0x0, MB(memsize), BOOT_MEM_RAM);
-+	add_memory_region(MB(memsize), LOONGSON_PCI_MEM_START - MB(memsize), BOOT_MEM_RESERVED);
- #ifdef CONFIG_CPU_SUPPORTS_ADDRWINCFG
--	{
--		int bit;
--
--		bit = fls(memsize + highmemsize);
--		if (bit != ffs(memsize + highmemsize))
--			bit += 20;
--		else
--			bit = bit + 20 - 1;
--
--		/* set cpu window3 to map CPU to DDR: 2G -> 2G */
--		LOONGSON_ADDRWIN_CPUTODDR(ADDRWIN_WIN3, 0x80000000ul,
--					  0x80000000ul, (1 << bit));
--		mmiowb();
--	}
--#endif /* !CONFIG_CPU_SUPPORTS_ADDRWINCFG */
-+	/* set cpu window3 to map CPU to DDR: 2G -> 0G */
-+	LOONGSON_ADDRWIN_CPUTODDR(ADDRWIN_WIN3, 0x80000000ul, 0, MB(memsize + highmemsize));
-+	mmiowb();
-+#endif
- 
- #ifdef CONFIG_64BIT
- 	if (highmemsize > 0)
--		add_memory_region(LOONGSON_HIGHMEM_START,
--				  highmemsize << 20, BOOT_MEM_RAM);
--
-+		add_memory_region(LOONGSON_HIGHMEM_START, MB(highmemsize), BOOT_MEM_RAM);
- 	add_memory_region(LOONGSON_PCI_MEM_END + 1, LOONGSON_HIGHMEM_START -
--			  LOONGSON_PCI_MEM_END - 1, BOOT_MEM_RESERVED);
--
--#endif /* !CONFIG_64BIT */
-+			LOONGSON_PCI_MEM_END - 1, BOOT_MEM_RESERVED);
-+#endif
- }
- 
- /* override of arch/mips/mm/cache.c: __uncached_access */
-diff -uprN linux-3.13/arch/mips/loongson/common/mtd.c linux-3.13-loongson/arch/mips/loongson/common/mtd.c
---- linux-3.13/arch/mips/loongson/common/mtd.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/mtd.c	2014-02-03 18:28:49.375321862 +0800
-@@ -0,0 +1,91 @@
-+/*
-+ *  Driver for flushing/dumping ROM of PMON on loongson family machines
-+ *
-+ *  Copyright (C) 2008-2009 Lemote Inc.
-+ *  Author: Yan Hua <yanh@lemote.com>
-+ *
-+ *  This program is free software; you can redistribute  it and/or modify it
-+ *  under  the terms of  the GNU General  Public License as published by the
-+ *  Free Software Foundation;  either version 2 of the  License, or (at your
-+ *  option) any later version.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/types.h>
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/map.h>
-+#include <linux/mtd/partitions.h>
-+
-+#include <asm/io.h>
-+
-+#include <loongson.h>
-+
-+#define FLASH_PHYS_ADDR LOONGSON_BOOT_BASE
-+#define FLASH_SIZE 0x080000
-+
-+#define FLASH_PARTITION0_ADDR 0x00000000
-+#define FLASH_PARTITION0_SIZE 0x00080000
-+
-+struct map_info flash_map = {
-+	.name = "flash device",
-+	.size = FLASH_SIZE,
-+	.bankwidth = 1,
-+};
-+
-+struct mtd_partition flash_parts[] = {
-+	{
-+	 .name = "Bootloader",
-+	 .offset = FLASH_PARTITION0_ADDR,
-+	 .size = FLASH_PARTITION0_SIZE},
-+};
-+
-+#define PARTITION_COUNT ARRAY_SIZE(flash_parts)
-+
-+static struct mtd_info *mymtd;
-+
-+int __init init_flash(void)
-+{
-+	printk(KERN_NOTICE "flash device: %x at %x\n",
-+	       FLASH_SIZE, FLASH_PHYS_ADDR);
-+
-+	flash_map.phys = FLASH_PHYS_ADDR;
-+	flash_map.virt = ioremap(FLASH_PHYS_ADDR, FLASH_SIZE);
-+
-+	if (!flash_map.virt) {
-+		printk(KERN_NOTICE "Failed to ioremap\n");
-+		return -EIO;
-+	}
-+
-+	simple_map_init(&flash_map);
-+
-+	mymtd = do_map_probe("cfi_probe", &flash_map);
-+	if (mymtd) {
-+		add_mtd_partitions(mymtd, flash_parts, PARTITION_COUNT);
-+		printk(KERN_NOTICE "pmon flash device initialized\n");
-+		return 0;
-+	}
-+
-+	iounmap((void *)flash_map.virt);
-+	return -ENXIO;
-+}
-+
-+static void __exit cleanup_flash(void)
-+{
-+	if (mymtd) {
-+		del_mtd_partitions(mymtd);
-+		map_destroy(mymtd);
-+	}
-+	if (flash_map.virt) {
-+		iounmap((void *)flash_map.virt);
-+		flash_map.virt = 0;
-+	}
-+}
-+
-+module_init(init_flash);
-+module_exit(cleanup_flash);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Yanhua <yanh@lemote.com>");
-+MODULE_DESCRIPTION("MTD driver for pmon flushing/dumping");
-diff -uprN linux-3.13/arch/mips/loongson/common/pci.c linux-3.13-loongson/arch/mips/loongson/common/pci.c
---- linux-3.13/arch/mips/loongson/common/pci.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/pci.c	2014-02-03 18:28:49.375321862 +0800
-@@ -50,11 +50,11 @@ static void __init setup_pcimap(void)
- 		LOONGSON_PCIMAP_WIN(0, 0);
- 
- 	/*
--	 * PCI-DMA to local mapping: [2G,2G+256M] -> [0M,256M]
-+	 * PCI-DMA to local mapping: [2G,4G] -> [0M,2G]
- 	 */
- 	LOONGSON_PCIBASE0 = 0x80000000ul;   /* base: 2G -> mmap: 0M */
--	/* size: 256M, burst transmission, pre-fetch enable, 64bit */
--	LOONGSON_PCI_HIT0_SEL_L = 0xc000000cul;
-+	/* size: 2G, burst transmission, pre-fetch enable, 64bit */
-+	LOONGSON_PCI_HIT0_SEL_L = 0x8000000cul;
- 	LOONGSON_PCI_HIT0_SEL_H = 0xfffffffful;
- 	LOONGSON_PCI_HIT1_SEL_L = 0x00000006ul; /* set this BAR as invalid */
- 	LOONGSON_PCI_HIT1_SEL_H = 0x00000000ul;
-diff -uprN linux-3.13/arch/mips/loongson/common/serial.c linux-3.13-loongson/arch/mips/loongson/common/serial.c
---- linux-3.13/arch/mips/loongson/common/serial.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/serial.c	2014-02-03 18:28:49.375321862 +0800
-@@ -10,6 +10,7 @@
-  * Author: Wu Zhangjin (wuzhangjin@gmail.com)
-  */
- 
-+#include <linux/module.h>
- #include <linux/io.h>
- #include <linux/init.h>
- #include <linux/serial_8250.h>
-@@ -19,58 +20,44 @@
- #include <loongson.h>
- #include <machine.h>
- 
--#define PORT(int)			\
-+#define PORT(int, base_baud, io_type, port)			\
- {								\
- 	.irq		= int,					\
--	.uartclk	= 1843200,				\
--	.iotype		= UPIO_PORT,				\
-+	.uartclk	= base_baud,				\
-+	.iotype		= io_type,				\
- 	.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST,	\
- 	.regshift	= 0,					\
-+	.iobase	= port,						\
- }
- 
--#define PORT_M(int)				\
--{								\
--	.irq		= MIPS_CPU_IRQ_BASE + (int),		\
--	.uartclk	= 3686400,				\
--	.iotype		= UPIO_MEM,				\
--	.membase	= (void __iomem *)NULL,			\
--	.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST,	\
--	.regshift	= 0,					\
--}
--
--static struct plat_serial8250_port uart8250_data[][2] = {
--	[MACH_LOONGSON_UNKNOWN]		{},
--	[MACH_LEMOTE_FL2E]		{PORT(4), {} },
--	[MACH_LEMOTE_FL2F]		{PORT(3), {} },
--	[MACH_LEMOTE_ML2F7]		{PORT_M(3), {} },
--	[MACH_LEMOTE_YL2F89]		{PORT_M(3), {} },
--	[MACH_DEXXON_GDIUM2F10]		{PORT_M(3), {} },
--	[MACH_LEMOTE_NAS]		{PORT_M(3), {} },
--	[MACH_LEMOTE_LL2F]		{PORT(3), {} },
--	[MACH_LOONGSON_END]		{},
-+static struct plat_serial8250_port uart8250_data[] = {
-+	/* ttyS0: cpu_uart0 Yeeloong, Gdium, UNAS, ...  */
-+	PORT((MIPS_CPU_IRQ_BASE + 3), 3686400, UPIO_MEM, 0x3f8),
-+	/* ttyS1: sb_uart1 2E */
-+	PORT(4, 1843200, UPIO_PORT, 0x3f8),
-+	/* ttyS2: sb_uart2 fuloong2f */
-+	PORT(3, 1843200, UPIO_PORT, 0x2f8),
-+	{},
- };
- 
- static struct platform_device uart8250_device = {
- 	.name = "serial8250",
- 	.id = PLAT8250_DEV_PLATFORM,
-+	.dev = {
-+		.platform_data = uart8250_data,
-+	},
- };
- 
- static int __init serial_init(void)
- {
--	unsigned char iotype;
--
--	iotype = uart8250_data[mips_machtype][0].iotype;
--
--	if (UPIO_MEM == iotype)
--		uart8250_data[mips_machtype][0].membase =
--			(void __iomem *)_loongson_uart_base;
--	else if (UPIO_PORT == iotype)
--		uart8250_data[mips_machtype][0].iobase =
--		    loongson_uart_base - LOONGSON_PCIIO_BASE;
--
--	uart8250_device.dev.platform_data = uart8250_data[mips_machtype];
-+	uart8250_data[0].membase = (void __iomem *)ioremap_nocache(
-+			LOONGSON_LIO1_BASE + uart8250_data[0].iobase, 8);
- 
--	return platform_device_register(&uart8250_device);
-+	platform_device_register(&uart8250_device);
-+	return 0;
- }
- 
- device_initcall(serial_init);
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("liu shiwei <liushiwei@anheng.com.cn>");
-+MODULE_DESCRIPTION("loongson serial");
-diff -uprN linux-3.13/arch/mips/loongson/common/time.c linux-3.13-loongson/arch/mips/loongson/common/time.c
---- linux-3.13/arch/mips/loongson/common/time.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/time.c	2014-02-03 18:28:49.376321897 +0800
-@@ -10,6 +10,8 @@
-  *  Free Software Foundation;  either version 2 of the	License, or (at your
-  *  option) any later version.
-  */
-+#include <linux/rtc.h>
-+
- #include <asm/mc146818-time.h>
- #include <asm/time.h>
- 
-@@ -24,8 +26,81 @@ void __init plat_time_init(void)
- 	setup_mfgpt0_timer();
- }
- 
-+#ifdef CONFIG_LOONGSON_MC146818
- void read_persistent_clock(struct timespec *ts)
- {
- 	ts->tv_sec = mc146818_get_cmos_time();
- 	ts->tv_nsec = 0;
- }
-+#else
-+
-+/* If no CMOS RTC, use the one below */
-+
-+/*
-+ * Cloned from drivers/rtc/hctosys.c
-+ *
-+ * If CONFIG_RTC_HCTOSYS=y is enabled, the system time can be set from the
-+ * hardware clock(when boot and resuming from suspend), this may be also done
-+ * (duplicately) by the timekeeper, which may need to be avoided(TODO).
-+ *
-+ * read_persistent_clock() may be useful in some places, e.g. there is not
-+ * peristent clock in the system, we can use this to recover the system time.
-+ *
-+ * Note: The device indicated by CONFIG_RTC_HCTOSYS_DEVICE must be the one
-+ * created by the RTC driver. Use Gdium as an example, We must disable the
-+ * rt_cmos driver If we want to use the rtc_m41t80 driver for
-+ * CONFIG_RTC_HCTOSYS_DEVICE is configured as /dev/rtc0, if rtc_cmos is
-+ * enabled, rtc_cmos driver will be used, but it is not supported by Gdium.
-+ * So, for Gdium, please ensure "# CONFIG_RTC_DRV_CMOS is not set"
-+ */
-+
-+#ifdef CONFIG_RTC_HCTOSYS
-+void read_persistent_clock(struct timespec *ts)
-+{
-+	int err = -ENODEV;
-+	struct rtc_time tm;
-+	struct rtc_device *rtc;
-+
-+	/* We can not access the RTC device before it is initialized ... */
-+	if (rtc_hctosys_ret != 0) {
-+		ts->tv_sec = 0;
-+		ts->tv_nsec = 0;
-+		return;
-+	}
-+
-+	rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
-+
-+	if (rtc == NULL) {
-+		pr_err("%s: unable to open rtc device (%s)\n",
-+			__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
-+		goto err_open;
-+	}
-+
-+	err = rtc_read_time(rtc, &tm);
-+	if (err) {
-+		dev_err(rtc->dev.parent,
-+			"hctosys: unable to read the hardware clock\n");
-+		goto err_read;
-+
-+	}
-+
-+	err = rtc_valid_tm(&tm);
-+	if (err) {
-+		dev_err(rtc->dev.parent,
-+			"hctosys: invalid date/time\n");
-+		goto err_invalid;
-+	}
-+
-+	ts->tv_nsec = NSEC_PER_SEC >> 1,
-+	rtc_tm_to_time(&tm, &ts->tv_sec);
-+
-+err_invalid:
-+err_read:
-+	rtc_class_close(rtc);
-+
-+err_open:
-+	rtc_hctosys_ret = err;
-+}
-+#endif /* CONFIG_RTC_HCTOSYS */
-+
-+#endif /* !CONFIG_LOONGSON_MC146818 */
-diff -uprN linux-3.13/arch/mips/loongson/common/uart_base.c linux-3.13-loongson/arch/mips/loongson/common/uart_base.c
---- linux-3.13/arch/mips/loongson/common/uart_base.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/common/uart_base.c	1970-01-01 08:00:00.000000000 +0800
-@@ -1,45 +0,0 @@
--/*
-- * Copyright (C) 2009 Lemote Inc.
-- * Author: Wu Zhangjin, wuzhangjin@gmail.com
-- *
-- * This program is free software; you can redistribute	it and/or modify it
-- * under  the terms of	the GNU General	 Public License as published by the
-- * Free Software Foundation;  either version 2 of the  License, or (at your
-- * option) any later version.
-- */
--
--#include <linux/module.h>
--#include <asm/bootinfo.h>
--
--#include <loongson.h>
--
--/* ioremapped */
--unsigned long _loongson_uart_base;
--EXPORT_SYMBOL(_loongson_uart_base);
--/* raw */
--unsigned long loongson_uart_base;
--EXPORT_SYMBOL(loongson_uart_base);
--
--void prom_init_loongson_uart_base(void)
--{
--	switch (mips_machtype) {
--	case MACH_LEMOTE_FL2E:
--		loongson_uart_base = LOONGSON_PCIIO_BASE + 0x3f8;
--		break;
--	case MACH_LEMOTE_FL2F:
--	case MACH_LEMOTE_LL2F:
--		loongson_uart_base = LOONGSON_PCIIO_BASE + 0x2f8;
--		break;
--	case MACH_LEMOTE_ML2F7:
--	case MACH_LEMOTE_YL2F89:
--	case MACH_DEXXON_GDIUM2F10:
--	case MACH_LEMOTE_NAS:
--	default:
--		/* The CPU provided serial port */
--		loongson_uart_base = LOONGSON_LIO1_BASE + 0x3f8;
--		break;
--	}
--
--	_loongson_uart_base =
--		(unsigned long)ioremap_nocache(loongson_uart_base, 8);
--}
-diff -uprN linux-3.13/arch/mips/loongson/fuloong-2e/irq.c linux-3.13-loongson/arch/mips/loongson/fuloong-2e/irq.c
---- linux-3.13/arch/mips/loongson/fuloong-2e/irq.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/fuloong-2e/irq.c	2014-02-03 18:28:49.376321897 +0800
-@@ -9,7 +9,6 @@
-  */
- #include <linux/interrupt.h>
- 
--#include <asm/irq_cpu.h>
- #include <asm/i8259.h>
- 
- #include <loongson.h>
-@@ -57,11 +56,6 @@ void __init mach_init_irq(void)
- 	LOONGSON_INTEDGE = LOONGSON_ICU_SYSTEMERR | LOONGSON_ICU_MASTERERR |
- 	    LOONGSON_ICU_RETRYERR | LOONGSON_ICU_MBOXES;
- 
--	/* Sets the first-level interrupt dispatcher. */
--	mips_cpu_irq_init();
--	init_i8259_irqs();
--	bonito_irq_init();
--
- 	/* bonito irq at IP2 */
- 	setup_irq(MIPS_CPU_IRQ_BASE + 2, &cascade_irqaction);
- 	/* 8259 irq at IP5 */
-diff -uprN linux-3.13/arch/mips/loongson/gdium/gdium-clock.c linux-3.13-loongson/arch/mips/loongson/gdium/gdium-clock.c
---- linux-3.13/arch/mips/loongson/gdium/gdium-clock.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/gdium-clock.c	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/gdium-clock.c linux-3.15-loongson/arch/mips/loongson/gdium/gdium-clock.c
+--- linux-3.15/arch/mips/loongson/gdium/gdium-clock.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/gdium-clock.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,234 @@
 +/*
 + * Doesn't work really well. When used, the clocksource is producing
@@ -1522,9 +472,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/gdium-clock.c linux-3.13-loongson
 +MODULE_DESCRIPTION("Gdium PWM clock driver");
 +MODULE_LICENSE("GPL");
 +MODULE_ALIAS("platform:gdium-pwmclk");
-diff -uprN linux-3.13/arch/mips/loongson/gdium/irq.c linux-3.13-loongson/arch/mips/loongson/gdium/irq.c
---- linux-3.13/arch/mips/loongson/gdium/irq.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/irq.c	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/irq.c linux-3.15-loongson/arch/mips/loongson/gdium/irq.c
+--- linux-3.15/arch/mips/loongson/gdium/irq.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/irq.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,55 @@
 +/*
 + * Copyright (C) 2007 Lemote Inc.
@@ -1581,9 +531,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/irq.c linux-3.13-loongson/arch/mi
 +	/* setup north bridge irq (bonito) */
 +	setup_irq(LOONGSON_NORTH_BRIDGE_IRQ, &ip6_irqaction);
 +}
-diff -uprN linux-3.13/arch/mips/loongson/gdium/Makefile linux-3.13-loongson/arch/mips/loongson/gdium/Makefile
---- linux-3.13/arch/mips/loongson/gdium/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/Makefile	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/Makefile linux-3.15-loongson/arch/mips/loongson/gdium/Makefile
+--- linux-3.15/arch/mips/loongson/gdium/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/Makefile	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,6 @@
 +# Makefile for gdium
 +
@@ -1591,9 +541,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/Makefile linux-3.13-loongson/arch
 +
 +obj-$(CONFIG_MFD_SM501) += sm501-pwm.o
 +obj-$(CONFIG_GDIUM_PWM_CLOCK) += gdium-clock.o
-diff -uprN linux-3.13/arch/mips/loongson/gdium/platform.c linux-3.13-loongson/arch/mips/loongson/gdium/platform.c
---- linux-3.13/arch/mips/loongson/gdium/platform.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/platform.c	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/platform.c linux-3.15-loongson/arch/mips/loongson/gdium/platform.c
+--- linux-3.15/arch/mips/loongson/gdium/platform.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/platform.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,135 @@
 +/*
 + * Copyright (c) 2009 Philippe Vachon <philippe@cowpig.ca>
@@ -1730,9 +680,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/platform.c linux-3.13-loongson/ar
 + * behind the pci bus so arch_initcall can't work because too early
 + */
 +late_initcall(gdium_platform_devices_setup);
-diff -uprN linux-3.13/arch/mips/loongson/gdium/reset.c linux-3.13-loongson/arch/mips/loongson/gdium/reset.c
---- linux-3.13/arch/mips/loongson/gdium/reset.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/reset.c	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/reset.c linux-3.15-loongson/arch/mips/loongson/gdium/reset.c
+--- linux-3.15/arch/mips/loongson/gdium/reset.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/reset.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,22 @@
 +/* Board-specific reboot/shutdown routines
 + *
@@ -1756,9 +706,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/reset.c linux-3.13-loongson/arch/
 +	LOONGSON_GPIOIE &= ~(1<<2);
 +	LOONGSON_GPIODATA &= ~(1<<2);
 +}
-diff -uprN linux-3.13/arch/mips/loongson/gdium/sm501-pwm.c linux-3.13-loongson/arch/mips/loongson/gdium/sm501-pwm.c
---- linux-3.13/arch/mips/loongson/gdium/sm501-pwm.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/gdium/sm501-pwm.c	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c linux-3.15-loongson/arch/mips/loongson/gdium/sm501-pwm.c
+--- linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/gdium/sm501-pwm.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,465 @@
 +/*
 + * SM501 PWM clock
@@ -2225,9 +1175,9 @@ diff -uprN linux-3.13/arch/mips/loongson/gdium/sm501-pwm.c linux-3.13-loongson/a
 +MODULE_DESCRIPTION("SM501 PWM driver");
 +MODULE_LICENSE("GPL");
 +MODULE_ALIAS("platform:sm501-pwm");
-diff -uprN linux-3.13/arch/mips/loongson/Kconfig linux-3.13-loongson/arch/mips/loongson/Kconfig
---- linux-3.13/arch/mips/loongson/Kconfig	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/Kconfig	2014-02-03 18:28:49.376321897 +0800
+diff -uprN linux-3.15/arch/mips/loongson/Kconfig linux-3.15-loongson/arch/mips/loongson/Kconfig
+--- linux-3.15/arch/mips/loongson/Kconfig	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/Kconfig	2014-07-03 06:09:49.000000000 +0800
 @@ -32,12 +32,12 @@ config LEMOTE_FULOONG2E
  
  config LEMOTE_MACH2F
@@ -2243,7 +1193,7 @@ diff -uprN linux-3.13/arch/mips/loongson/Kconfig linux-3.13-loongson/arch/mips/l
  	select CSRC_R4K if ! MIPS_EXTERNAL_TIMER
  	select DMA_NONCOHERENT
  	select GENERIC_ISA_DMA_SUPPORT_BROKEN
-@@ -45,23 +45,68 @@ config LEMOTE_MACH2F
+@@ -45,14 +45,13 @@ config LEMOTE_MACH2F
  	select HW_HAS_PCI
  	select I8259
  	select IRQ_CPU
@@ -2260,10 +1210,10 @@ diff -uprN linux-3.13/arch/mips/loongson/Kconfig linux-3.13-loongson/arch/mips/l
  	help
  	  Lemote Loongson 2F family machines utilize the 2F revision of
  	  Loongson processor and the AMD CS5536 south bridge.
- 
+@@ -60,6 +59,31 @@ config LEMOTE_MACH2F
  	  These family machines include fuloong2f mini PC, yeeloong2f notebook,
  	  LingLoong allinone PC and so forth.
-+
+ 
 +config DEXXON_GDIUM
 +	bool "Dexxon Gdium Netbook"
 +	select ARCH_SPARSEMEM_ENABLE
@@ -2288,43 +1238,11 @@ diff -uprN linux-3.13/arch/mips/loongson/Kconfig linux-3.13-loongson/arch/mips/l
 +	select HAVE_PWM if MFD_SM501
 +	help
 +	  Dexxon gdium netbook based on Loongson 2F and SM502.
- endchoice
- 
- config CS5536
-+	select CS5536_IDE if (PATA_AMD || BLK_DEV_AMD74XX || PATA_CS5536)
-+	select CS5536_OHCI if USB_OHCI_HCD
-+	select CS5536_EHCI if USB_EHCI_HCD
-+	select CS5536_AUDIO if SND_CS5535AUDIO
-+	select CS5536_ISA
-+	bool
 +
-+config CS5536_ISA
-+	select ISA
-+	bool
-+
-+config CS5536_IDE
-+	bool
-+
-+config CS5536_OHCI
-+	bool
-+
-+config CS5536_EHCI
-+	bool
-+
-+config CS5536_AUDIO
- 	bool
- 
- config CS5536_MFGPT
-@@ -81,13 +126,25 @@ config LOONGSON_SUSPEND
- 	default y
- 	depends on CPU_SUPPORTS_CPUFREQ && SUSPEND
- 
--config LOONGSON_UART_BASE
--	bool
--	default y
--	depends on EARLY_PRINTK || SERIAL_8250
--
- config LOONGSON_MC146818
+ config LEMOTE_MACH3A
+ 	bool "Lemote Loongson 3A family machines"
+ 	select ARCH_SPARSEMEM_ENABLE
+@@ -133,6 +157,24 @@ config LOONGSON_MC146818
  	bool
  	default n
  
@@ -2345,35 +1263,13 @@ diff -uprN linux-3.13/arch/mips/loongson/Kconfig linux-3.13-loongson/arch/mips/l
 +	  I have no information about how to determine which version your board
 +	  is, If the default config doesn't work for it, please change it to
 +	  smaller ones.
- endif # MACH_LOONGSON
-diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/irq.c linux-3.13-loongson/arch/mips/loongson/lemote-2f/irq.c
---- linux-3.13/arch/mips/loongson/lemote-2f/irq.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/lemote-2f/irq.c	2014-02-03 18:28:49.376321897 +0800
-@@ -11,9 +11,7 @@
- #include <linux/interrupt.h>
- #include <linux/module.h>
++
+ config LEFI_FIRMWARE_INTERFACE
+ 	bool
  
--#include <asm/irq_cpu.h>
- #include <asm/i8259.h>
--#include <asm/mipsregs.h>
- 
- #include <loongson.h>
- #include <machine.h>
-@@ -117,11 +115,6 @@ void __init mach_init_irq(void)
- 	LOONGSON_INTPOL = LOONGSON_INT_BIT_INT0 | LOONGSON_INT_BIT_INT1;
- 	LOONGSON_INTEDGE &= ~(LOONGSON_INT_BIT_INT0 | LOONGSON_INT_BIT_INT1);
- 
--	/* Sets the first-level interrupt dispatcher. */
--	mips_cpu_irq_init();
--	init_i8259_irqs();
--	bonito_irq_init();
--
- 	/* setup north bridge irq (bonito) */
- 	setup_irq(LOONGSON_NORTH_BRIDGE_IRQ, &ip6_irqaction);
- 	/* setup source bridge irq (i8259) */
-diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/Makefile linux-3.13-loongson/arch/mips/loongson/lemote-2f/Makefile
---- linux-3.13/arch/mips/loongson/lemote-2f/Makefile	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/lemote-2f/Makefile	2014-02-03 18:28:49.377321931 +0800
+diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/Makefile linux-3.15-loongson/arch/mips/loongson/lemote-2f/Makefile
+--- linux-3.15/arch/mips/loongson/lemote-2f/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/lemote-2f/Makefile	2014-07-03 06:09:49.000000000 +0800
 @@ -2,7 +2,7 @@
  # Makefile for lemote loongson2f family machines
  #
@@ -2383,9 +1279,9 @@ diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/Makefile linux-3.13-loongson/
  
  #
  # Suspend Support
-diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/platform.c linux-3.13-loongson/arch/mips/loongson/lemote-2f/platform.c
---- linux-3.13/arch/mips/loongson/lemote-2f/platform.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/lemote-2f/platform.c	2014-02-03 18:28:49.377321931 +0800
+diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/platform.c linux-3.15-loongson/arch/mips/loongson/lemote-2f/platform.c
+--- linux-3.15/arch/mips/loongson/lemote-2f/platform.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/lemote-2f/platform.c	2014-07-03 06:09:49.000000000 +0800
 @@ -0,0 +1,48 @@
 +/*
 + * Copyright (C) 2009 Lemote Inc.
@@ -2435,46 +1331,34 @@ diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/platform.c linux-3.13-loongso
 +}
 +
 +arch_initcall(lemote2f_platform_init);
-diff -uprN linux-3.13/arch/mips/loongson/lemote-2f/pm.c linux-3.13-loongson/arch/mips/loongson/lemote-2f/pm.c
---- linux-3.13/arch/mips/loongson/lemote-2f/pm.c	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/lemote-2f/pm.c	2014-02-03 18:28:49.377321931 +0800
-@@ -140,10 +140,10 @@ int wakeup_loongson(void)
- 
- void __weak mach_suspend(void)
- {
--	disable_mfgpt0_counter();
-+	disable_mfgpt_counter();
- }
- 
- void __weak mach_resume(void)
- {
--	enable_mfgpt0_counter();
-+	enable_mfgpt_counter();
- }
-diff -uprN linux-3.13/arch/mips/loongson/Makefile linux-3.13-loongson/arch/mips/loongson/Makefile
---- linux-3.13/arch/mips/loongson/Makefile	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/Makefile	2014-02-03 18:28:49.377321931 +0800
-@@ -15,3 +15,9 @@ obj-$(CONFIG_LEMOTE_FULOONG2E)	+= fuloon
- #
- 
+diff -uprN linux-3.15/arch/mips/loongson/Makefile linux-3.15-loongson/arch/mips/loongson/Makefile
+--- linux-3.15/arch/mips/loongson/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/Makefile	2014-07-03 06:09:49.000000000 +0800
+@@ -17,6 +17,12 @@ obj-$(CONFIG_LEMOTE_FULOONG2E)	+= fuloon
  obj-$(CONFIG_LEMOTE_MACH2F)  += lemote-2f/
-+
-+#
+ 
+ #
 +# Dexxon gdium netbook, based on loongson 2F and SM502
 +#
 +
 +obj-$(CONFIG_DEXXON_GDIUM)  += gdium/
-diff -uprN linux-3.13/arch/mips/loongson/Platform linux-3.13-loongson/arch/mips/loongson/Platform
---- linux-3.13/arch/mips/loongson/Platform	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/arch/mips/loongson/Platform	2014-02-03 18:28:49.377321931 +0800
-@@ -30,3 +30,4 @@ platform-$(CONFIG_MACH_LOONGSON) += loon
++
++#
+ # All Loongson-3 family machines
+ #
+ 
+diff -uprN linux-3.15/arch/mips/loongson/Platform linux-3.15-loongson/arch/mips/loongson/Platform
+--- linux-3.15/arch/mips/loongson/Platform	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/arch/mips/loongson/Platform	2014-07-03 06:09:49.000000000 +0800
+@@ -30,4 +30,5 @@ platform-$(CONFIG_MACH_LOONGSON) += loon
  cflags-$(CONFIG_MACH_LOONGSON) += -I$(srctree)/arch/mips/include/asm/mach-loongson -mno-branch-likely
  load-$(CONFIG_LEMOTE_FULOONG2E) += 0xffffffff80100000
  load-$(CONFIG_LEMOTE_MACH2F) += 0xffffffff80200000
 +load-$(CONFIG_DEXXON_GDIUM) += 0xffffffff80200000
-diff -uprN linux-3.13/drivers/platform/Kconfig linux-3.13-loongson/drivers/platform/Kconfig
---- linux-3.13/drivers/platform/Kconfig	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/Kconfig	2014-02-03 18:47:38.340942666 +0800
+ load-$(CONFIG_CPU_LOONGSON3) += 0xffffffff80200000
+diff -uprN linux-3.15/drivers/platform/Kconfig linux-3.15-loongson/drivers/platform/Kconfig
+--- linux-3.15/drivers/platform/Kconfig	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/Kconfig	2014-07-03 06:16:39.506759880 +0800
 @@ -4,5 +4,8 @@ endif
  if GOLDFISH
  source "drivers/platform/goldfish/Kconfig"
@@ -2484,20 +1368,20 @@ diff -uprN linux-3.13/drivers/platform/Kconfig linux-3.13-loongson/drivers/platf
 +endif
  
  source "drivers/platform/chrome/Kconfig"
-diff -uprN linux-3.13/drivers/platform/Makefile linux-3.13-loongson/drivers/platform/Makefile
---- linux-3.13/drivers/platform/Makefile	2014-01-20 10:40:07.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/Makefile	2014-02-03 18:47:04.388783381 +0800
+diff -uprN linux-3.15/drivers/platform/Makefile linux-3.15-loongson/drivers/platform/Makefile
+--- linux-3.15/drivers/platform/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/Makefile	2014-07-03 06:16:59.979488035 +0800
 @@ -3,6 +3,7 @@
  #
  
  obj-$(CONFIG_X86)		+= x86/
-+obj-$(CONFIG_MIPS)		+= mips/
++obj-$(CONFIG_MIPS)              += mips/
  obj-$(CONFIG_OLPC)		+= olpc/
  obj-$(CONFIG_GOLDFISH)		+= goldfish/
  obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
-diff -uprN linux-3.13/drivers/platform/mips/gdium_laptop.c linux-3.13-loongson/drivers/platform/mips/gdium_laptop.c
---- linux-3.13/drivers/platform/mips/gdium_laptop.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/gdium_laptop.c	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/gdium_laptop.c linux-3.15-loongson/drivers/platform/mips/gdium_laptop.c
+--- linux-3.15/drivers/platform/mips/gdium_laptop.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/gdium_laptop.c	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,927 @@
 +/*
 + * gdium_laptop  --  Gdium laptop extras
@@ -3426,9 +2310,9 @@ diff -uprN linux-3.13/drivers/platform/mips/gdium_laptop.c linux-3.13-loongson/d
 +MODULE_AUTHOR("Arnaud Patard <apatard@mandriva.com>");
 +MODULE_DESCRIPTION("Gdium laptop extras");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.13/drivers/platform/mips/Kconfig linux-3.13-loongson/drivers/platform/mips/Kconfig
---- linux-3.13/drivers/platform/mips/Kconfig	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/Kconfig	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/Kconfig linux-3.15-loongson/drivers/platform/mips/Kconfig
+--- linux-3.15/drivers/platform/mips/Kconfig	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/Kconfig	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,60 @@
 +#
 +# MIPS Platform Specific Drivers
@@ -3490,9 +2374,9 @@ diff -uprN linux-3.13/drivers/platform/mips/Kconfig linux-3.13-loongson/drivers/
 +	  This gives battery support, wlan rfkill.
 +
 +endif # MIPS_PLATFORM_DEVICES
-diff -uprN linux-3.13/drivers/platform/mips/lynloong_pc.c linux-3.13-loongson/drivers/platform/mips/lynloong_pc.c
---- linux-3.13/drivers/platform/mips/lynloong_pc.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/lynloong_pc.c	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/lynloong_pc.c linux-3.15-loongson/drivers/platform/mips/lynloong_pc.c
+--- linux-3.15/drivers/platform/mips/lynloong_pc.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/lynloong_pc.c	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,515 @@
 +/*
 + * Driver for LynLoong PC extras
@@ -4009,9 +2893,9 @@ diff -uprN linux-3.13/drivers/platform/mips/lynloong_pc.c linux-3.13-loongson/dr
 +MODULE_AUTHOR("Wu Zhangjin <wuzhangjin@gmail.com>; Xiang Yu <xiangy@lemote.com>");
 +MODULE_DESCRIPTION("LynLoong PC driver");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.13/drivers/platform/mips/Makefile linux-3.13-loongson/drivers/platform/mips/Makefile
---- linux-3.13/drivers/platform/mips/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/Makefile	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/Makefile linux-3.15-loongson/drivers/platform/mips/Makefile
+--- linux-3.15/drivers/platform/mips/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/Makefile	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,9 @@
 +#
 +# Makefile for MIPS Platform-Specific Drivers
@@ -4022,9 +2906,9 @@ diff -uprN linux-3.13/drivers/platform/mips/Makefile linux-3.13-loongson/drivers
 +
 +obj-$(CONFIG_LEMOTE_LYNLOONG2F)	+= lynloong_pc.o
 +obj-$(CONFIG_GDIUM_LAPTOP)	+= gdium_laptop.o
-diff -uprN linux-3.13/drivers/platform/mips/yeeloong_ecrom.c linux-3.13-loongson/drivers/platform/mips/yeeloong_ecrom.c
---- linux-3.13/drivers/platform/mips/yeeloong_ecrom.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/yeeloong_ecrom.c	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/yeeloong_ecrom.c linux-3.15-loongson/drivers/platform/mips/yeeloong_ecrom.c
+--- linux-3.15/drivers/platform/mips/yeeloong_ecrom.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/yeeloong_ecrom.c	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,944 @@
 +/*
 + * Driver for flushing/dumping ROM of EC on YeeLoong laptop
@@ -4970,9 +3854,9 @@ diff -uprN linux-3.13/drivers/platform/mips/yeeloong_ecrom.c linux-3.13-loongson
 +MODULE_AUTHOR("liujl <liujl@lemote.com>");
 +MODULE_DESCRIPTION("Driver for flushing/dumping ROM of EC on YeeLoong laptop");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.13/drivers/platform/mips/yeeloong_laptop.c linux-3.13-loongson/drivers/platform/mips/yeeloong_laptop.c
---- linux-3.13/drivers/platform/mips/yeeloong_laptop.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.13-loongson/drivers/platform/mips/yeeloong_laptop.c	2014-02-03 18:46:25.027439462 +0800
+diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-loongson/drivers/platform/mips/yeeloong_laptop.c
+--- linux-3.15/drivers/platform/mips/yeeloong_laptop.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15-loongson/drivers/platform/mips/yeeloong_laptop.c	2014-07-03 06:09:51.000000000 +0800
 @@ -0,0 +1,1354 @@
 +/*
 + * Driver for YeeLoong laptop extras
