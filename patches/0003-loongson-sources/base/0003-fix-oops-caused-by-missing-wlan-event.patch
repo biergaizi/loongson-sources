@@ -1,0 +1,11 @@
+diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-fix-wifi-fn-button/drivers/platform/mips/yeeloong_laptop.c
+--- linux-3.15/drivers/platform/mips/yeeloong_laptop.c  2014-07-03 07:57:10.039453595 +0800
++++ linux-3.15-fix-wifi-fn-button/drivers/platform/mips/yeeloong_laptop.c       2014-07-03 07:59:40.800815141 +0800
+@@ -974,6 +974,7 @@ static const struct sci_event se[] = {
+ 	[EVENT_DISPLAY_TOGGLE] = {0, switchvideomode_handler},
+ 	[EVENT_USB_OC0] = {REG_USB2_FLAG, usb0_handler},
+ 	[EVENT_USB_OC2] = {REG_USB2_FLAG, usb2_handler},
++	[EVENT_WLAN] = {REG_WLAN, NULL},
+ };
+ 
+ static void do_event_action(int event)

@@ -1,0 +1,24 @@
+diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-fix-fn/drivers/platform/mips/yeeloong_laptop.c
+--- linux-3.15/drivers/platform/mips/yeeloong_laptop.c  2014-07-03 07:44:30.467523711 +0800
++++ linux-3.15-fix-fn/drivers/platform/mips/yeeloong_laptop.c   2014-07-03 07:50:01.430236919 +0800
+@@ -978,7 +978,7 @@ static const struct sci_event se[] = {
+ 
+ static void do_event_action(int event)
+ {
+-	int status;
++	int status = -1;
+ 	struct key_entry *ke;
+ 	struct sci_event *sep;
+ 
+@@ -987,6 +987,11 @@ static void do_event_action(int event)
+ 	if (sep->reg != 0)
+ 		status = ec_read(sep->reg);
+ 
++	if (status == -1) {
++		/* ec_read hasn't been called, status is invalid */
++		return;
++	}
++
+ 	if (sep->handler != NULL)
+ 		status = sep->handler(status);
+ 
