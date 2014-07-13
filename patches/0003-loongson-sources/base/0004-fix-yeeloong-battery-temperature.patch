@@ -1,7 +1,32 @@
-diff -ruN linux/drivers/platform/mips/yeeloong_laptop.c linux-fixed/drivers/platform/mips/yeeloong_laptop.c
---- linux/drivers/platform/mips/yeeloong_laptop.c	2014-01-01 19:21:06.356567382 +0800
-+++ linux-fixed/drivers/platform/mips/yeeloong_laptop.c	2014-01-01 19:21:33.672607421 +0800
-@@ -168,7 +168,7 @@
+From 3a5e5e833ab4a11f703d4807b3cbfcef0c5965a3 Mon Sep 17 00:00:00 2001
+From: Tom Li <biergaizi2009@gmail.com>
+Date: Mon, 14 Jul 2014 07:31:55 +0800
+Subject: [PATCH] yeeloong_laptop: Fix incorrect battery temperature
+
+Because of a incorrect multiplier, upower --dump got a crazy
+battery temperature.
+
+battery:
+    present: yes
+    ...
+    voltage: 12.538 V
+    percentage: 100%
+    temperature: 3000 degrees C
+
+After correct the multiplier from 1000 to 10, I got a normal result.
+
+    temperature: 30 degrees C
+
+Signed-off-by: Tom Li <biergaizi@member.fsf.org>
+---
+ drivers/platform/mips/yeeloong_laptop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/platform/mips/yeeloong_laptop.c b/drivers/platform/mips/yeeloong_laptop.c
+index 4f2cd91..ff1d2ff 100644
+--- a/drivers/platform/mips/yeeloong_laptop.c
++++ b/drivers/platform/mips/yeeloong_laptop.c
+@@ -168,7 +168,7 @@ static inline bool is_bat_in(void)
  
  static int get_bat_temp(void)
  {
@@ -10,3 +35,6 @@ diff -ruN linux/drivers/platform/mips/yeeloong_laptop.c linux-fixed/drivers/plat
  }
  
  static int get_bat_current(void)
+-- 
+2.0.0
+
