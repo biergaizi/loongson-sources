@@ -13,7 +13,7 @@ rm -r ${release}/lib/modules/${release}/build
 rm -r ${release}/lib/modules/${release}/source
 cp COPYING ${release}
 
-tar -cJf linux-${release}.tar.xz ${release}
+tar -cf - ${release} | xz -9 -e - > linux-${release}.tar.xz
 rm -rf ${release}
 
 gpg -o linux-${release}.tar.xz.sig -ab linux-${release}.tar.xz
