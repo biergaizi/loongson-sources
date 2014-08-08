@@ -1,0 +1,24 @@
+From 9b9e05cb3ee2c4bb28b0f73f0584c1c4876bc31e Mon Sep 17 00:00:00 2001
+From: Alexandre Oliva <oliva@gnu.org>
+Date: Sun, 01 Jun 2014 02:38:00 +0000
+Subject: Unbreak resume from hibernate on yeeloong
+
+Revert commit 771004298, introduced in 3.14.4, that broke resume after
+hibernate on yeeloong.
+
+Signed-off-by: Alexandre Oliva <oliva@gnu.org>
+---
+diff --git a/arch/mips/power/hibernate.S b/arch/mips/power/hibernate.S
+index 32a7c82..7e0277a 100644
+--- a/arch/mips/power/hibernate.S
++++ b/arch/mips/power/hibernate.S
+@@ -43,7 +43,6 @@ LEAF(swsusp_arch_resume)
+ 	bne t1, t3, 1b
+ 	PTR_L t0, PBE_NEXT(t0)
+ 	bnez t0, 0b
+-	jal local_flush_tlb_all /* Avoid TLB mismatch after kernel resume */
+ 	PTR_LA t0, saved_regs
+ 	PTR_L ra, PT_R31(t0)
+ 	PTR_L sp, PT_R29(t0)
+--
+cgit v0.9.0.2
