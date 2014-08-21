@@ -1,19 +1,21 @@
 loongson-sources
 ====================
-loongson-sources is a kernel for YeeLoong 8089D with Loongson 2F processor.
+loongson-sources is a patchset against offical upstream Linux kernel for YeeLoong 8089D with Loongson 2F processor.
 
 
 Features
 ----------
-* BFS
-* UKSM
+* genpatches
+* <del>BFS</del> (disabled for now because of random hang)
 * BFQ
 * CJKtty
+* UKSM
 * exfat
-
+* colored kernel message output
 * 2D accelerated sm712fb framebuffer
-* Power Management Driver
-* Fn keys Driver
+* YeeLoong Power Management Driver
+* YeeLoong Fn keys Driver
+* Out-of-tree bugfixes
 
 Binary
 ----------
