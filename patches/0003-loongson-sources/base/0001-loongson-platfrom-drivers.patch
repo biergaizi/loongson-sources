@@ -1,6 +1,6 @@
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h
---- linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h	2014-09-21 00:41:01.440001550 +0800
 @@ -301,5 +301,40 @@ extern void _wrmsr(u32 msr, u32 hi, u32
  /* GPIO : I/O SPACE; REG : 32BITS */
  #define GPIOL_OUT_VAL		0x00
@@ -42,9 +42,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536.h linux-
 +#define	SMB_CTRL3		0x06
  
  #endif				/* _CS5536_H */
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h
---- linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h	2014-09-21 00:41:01.440001550 +0800
 @@ -28,8 +28,19 @@ static inline void __maybe_unused enable
  #define COMPARE	 ((MFGPT_TICK_RATE + HZ/2) / HZ)
  
@@ -65,9 +65,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/cs5536/cs5536_mfgpt.h 
 +#define MFGPT2_SETUP	(MFGPT_BASE + 0x16)
 +
  #endif /*!_CS5536_MFGPT_H */
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/loongson.h
---- linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/loongson.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson/loongson.h linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson/loongson.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h	2014-09-21 00:41:01.441001580 +0800
 @@ -46,6 +46,12 @@ static inline void prom_init_uart_base(v
  #endif
  }
@@ -81,9 +81,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/loongson.h linux-3.15-
  /* irq operation functions */
  extern void bonito_irqdispatch(void);
  extern void __init bonito_irq_init(void);
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/machine.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson/machine.h
---- linux-3.15/arch/mips/include/asm/mach-loongson/machine.h	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson/machine.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson/machine.h linux-3.15/arch/mips/include/asm/mach-loongson/machine.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson/machine.h	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson/machine.h	2014-09-21 00:41:01.441001580 +0800
 @@ -24,6 +24,12 @@
  
  #endif
@@ -97,9 +97,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson/machine.h linux-3.15-l
  #ifdef CONFIG_LEMOTE_MACH3A
  
  #define LOONGSON_MACHTYPE MACH_LEMOTE_A1101
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/clock.h
---- linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/clock.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson1/clock.h linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson1/clock.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,53 @@
 +#ifndef __ASM_MACH_LOONGSON1_CLOCK_H
 +#define __ASM_MACH_LOONGSON1_CLOCK_H
@@ -154,9 +154,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/clock.h linux-3.15-lo
 +void clk_unregister(struct clk *);
 +
 +#endif				/* __ASM_MIPS_CLOCK_H */
-diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h
---- linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/include/asm/mach-loongson1/regs-intc.h	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h
+--- linux-3.15.orig/arch/mips/include/asm/mach-loongson1/regs-intc.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,25 @@
 +/*
 + * Copyright (c) 2011 Zhang, Keguang <keguang.zhang@gmail.com>
@@ -183,9 +183,9 @@ diff -uprN linux-3.15/arch/mips/include/asm/mach-loongson1/regs-intc.h linux-3.1
 +#define LS1X_INTC_INTEDGE(n)		LS1X_INTC_REG(n, 0x14)
 +
 +#endif /* __ASM_MACH_LOONGSON1_REGS_INTC_H */
-diff -uprN linux-3.15/arch/mips/loongson/common/cmdline.c linux-3.15-loongson/arch/mips/loongson/common/cmdline.c
---- linux-3.15/arch/mips/loongson/common/cmdline.c	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/common/cmdline.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/common/cmdline.c linux-3.15/arch/mips/loongson/common/cmdline.c
+--- linux-3.15.orig/arch/mips/loongson/common/cmdline.c	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/loongson/common/cmdline.c	2014-09-21 00:41:01.441001580 +0800
 @@ -17,10 +17,15 @@
   * Free Software Foundation;  either version 2 of the  License, or (at your
   * option) any later version.
@@ -234,9 +234,9 @@ diff -uprN linux-3.15/arch/mips/loongson/common/cmdline.c linux-3.15-loongson/ar
 +	/* copy arcs_cmdline into loongson_cmdline */
 +	strncpy(loongson_cmdline, arcs_cmdline, COMMAND_LINE_SIZE);
  }
-diff -uprN linux-3.15/arch/mips/loongson/gdium/gdium-clock.c linux-3.15-loongson/arch/mips/loongson/gdium/gdium-clock.c
---- linux-3.15/arch/mips/loongson/gdium/gdium-clock.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/gdium-clock.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/gdium-clock.c linux-3.15/arch/mips/loongson/gdium/gdium-clock.c
+--- linux-3.15.orig/arch/mips/loongson/gdium/gdium-clock.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/gdium-clock.c	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,234 @@
 +/*
 + * Doesn't work really well. When used, the clocksource is producing
@@ -472,9 +472,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/gdium-clock.c linux-3.15-loongson
 +MODULE_DESCRIPTION("Gdium PWM clock driver");
 +MODULE_LICENSE("GPL");
 +MODULE_ALIAS("platform:gdium-pwmclk");
-diff -uprN linux-3.15/arch/mips/loongson/gdium/irq.c linux-3.15-loongson/arch/mips/loongson/gdium/irq.c
---- linux-3.15/arch/mips/loongson/gdium/irq.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/irq.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/irq.c linux-3.15/arch/mips/loongson/gdium/irq.c
+--- linux-3.15.orig/arch/mips/loongson/gdium/irq.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/irq.c	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,55 @@
 +/*
 + * Copyright (C) 2007 Lemote Inc.
@@ -531,9 +531,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/irq.c linux-3.15-loongson/arch/mi
 +	/* setup north bridge irq (bonito) */
 +	setup_irq(LOONGSON_NORTH_BRIDGE_IRQ, &ip6_irqaction);
 +}
-diff -uprN linux-3.15/arch/mips/loongson/gdium/Makefile linux-3.15-loongson/arch/mips/loongson/gdium/Makefile
---- linux-3.15/arch/mips/loongson/gdium/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/Makefile	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/Makefile linux-3.15/arch/mips/loongson/gdium/Makefile
+--- linux-3.15.orig/arch/mips/loongson/gdium/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/Makefile	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,6 @@
 +# Makefile for gdium
 +
@@ -541,9 +541,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/Makefile linux-3.15-loongson/arch
 +
 +obj-$(CONFIG_MFD_SM501) += sm501-pwm.o
 +obj-$(CONFIG_GDIUM_PWM_CLOCK) += gdium-clock.o
-diff -uprN linux-3.15/arch/mips/loongson/gdium/platform.c linux-3.15-loongson/arch/mips/loongson/gdium/platform.c
---- linux-3.15/arch/mips/loongson/gdium/platform.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/platform.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/platform.c linux-3.15/arch/mips/loongson/gdium/platform.c
+--- linux-3.15.orig/arch/mips/loongson/gdium/platform.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/platform.c	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,135 @@
 +/*
 + * Copyright (c) 2009 Philippe Vachon <philippe@cowpig.ca>
@@ -680,9 +680,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/platform.c linux-3.15-loongson/ar
 + * behind the pci bus so arch_initcall can't work because too early
 + */
 +late_initcall(gdium_platform_devices_setup);
-diff -uprN linux-3.15/arch/mips/loongson/gdium/reset.c linux-3.15-loongson/arch/mips/loongson/gdium/reset.c
---- linux-3.15/arch/mips/loongson/gdium/reset.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/reset.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/reset.c linux-3.15/arch/mips/loongson/gdium/reset.c
+--- linux-3.15.orig/arch/mips/loongson/gdium/reset.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/reset.c	2014-09-21 00:41:01.441001580 +0800
 @@ -0,0 +1,22 @@
 +/* Board-specific reboot/shutdown routines
 + *
@@ -706,9 +706,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/reset.c linux-3.15-loongson/arch/
 +	LOONGSON_GPIOIE &= ~(1<<2);
 +	LOONGSON_GPIODATA &= ~(1<<2);
 +}
-diff -uprN linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c linux-3.15-loongson/arch/mips/loongson/gdium/sm501-pwm.c
---- linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/gdium/sm501-pwm.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/gdium/sm501-pwm.c linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c
+--- linux-3.15.orig/arch/mips/loongson/gdium/sm501-pwm.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c	2014-09-21 00:41:01.442001610 +0800
 @@ -0,0 +1,465 @@
 +/*
 + * SM501 PWM clock
@@ -1175,9 +1175,9 @@ diff -uprN linux-3.15/arch/mips/loongson/gdium/sm501-pwm.c linux-3.15-loongson/a
 +MODULE_DESCRIPTION("SM501 PWM driver");
 +MODULE_LICENSE("GPL");
 +MODULE_ALIAS("platform:sm501-pwm");
-diff -uprN linux-3.15/arch/mips/loongson/Kconfig linux-3.15-loongson/arch/mips/loongson/Kconfig
---- linux-3.15/arch/mips/loongson/Kconfig	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/Kconfig	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/Kconfig linux-3.15/arch/mips/loongson/Kconfig
+--- linux-3.15.orig/arch/mips/loongson/Kconfig	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/loongson/Kconfig	2014-09-21 00:41:01.442001610 +0800
 @@ -32,12 +32,12 @@ config LEMOTE_FULOONG2E
  
  config LEMOTE_MACH2F
@@ -1267,9 +1267,9 @@ diff -uprN linux-3.15/arch/mips/loongson/Kconfig linux-3.15-loongson/arch/mips/l
  config LEFI_FIRMWARE_INTERFACE
  	bool
  
-diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/Makefile linux-3.15-loongson/arch/mips/loongson/lemote-2f/Makefile
---- linux-3.15/arch/mips/loongson/lemote-2f/Makefile	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/lemote-2f/Makefile	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/lemote-2f/Makefile linux-3.15/arch/mips/loongson/lemote-2f/Makefile
+--- linux-3.15.orig/arch/mips/loongson/lemote-2f/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/loongson/lemote-2f/Makefile	2014-09-21 00:41:01.442001610 +0800
 @@ -2,7 +2,7 @@
  # Makefile for lemote loongson2f family machines
  #
@@ -1279,9 +1279,9 @@ diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/Makefile linux-3.15-loongson/
  
  #
  # Suspend Support
-diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/platform.c linux-3.15-loongson/arch/mips/loongson/lemote-2f/platform.c
---- linux-3.15/arch/mips/loongson/lemote-2f/platform.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/lemote-2f/platform.c	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/lemote-2f/platform.c linux-3.15/arch/mips/loongson/lemote-2f/platform.c
+--- linux-3.15.orig/arch/mips/loongson/lemote-2f/platform.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/arch/mips/loongson/lemote-2f/platform.c	2014-09-21 00:41:01.442001610 +0800
 @@ -0,0 +1,48 @@
 +/*
 + * Copyright (C) 2009 Lemote Inc.
@@ -1331,9 +1331,9 @@ diff -uprN linux-3.15/arch/mips/loongson/lemote-2f/platform.c linux-3.15-loongso
 +}
 +
 +arch_initcall(lemote2f_platform_init);
-diff -uprN linux-3.15/arch/mips/loongson/Makefile linux-3.15-loongson/arch/mips/loongson/Makefile
---- linux-3.15/arch/mips/loongson/Makefile	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/Makefile	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/Makefile linux-3.15/arch/mips/loongson/Makefile
+--- linux-3.15.orig/arch/mips/loongson/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/loongson/Makefile	2014-09-21 00:41:01.442001610 +0800
 @@ -17,6 +17,12 @@ obj-$(CONFIG_LEMOTE_FULOONG2E)	+= fuloon
  obj-$(CONFIG_LEMOTE_MACH2F)  += lemote-2f/
  
@@ -1347,18 +1347,18 @@ diff -uprN linux-3.15/arch/mips/loongson/Makefile linux-3.15-loongson/arch/mips/
  # All Loongson-3 family machines
  #
  
-diff -uprN linux-3.15/arch/mips/loongson/Platform linux-3.15-loongson/arch/mips/loongson/Platform
---- linux-3.15/arch/mips/loongson/Platform	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/arch/mips/loongson/Platform	2014-07-03 06:09:49.000000000 +0800
+diff -uprN linux-3.15.orig/arch/mips/loongson/Platform linux-3.15/arch/mips/loongson/Platform
+--- linux-3.15.orig/arch/mips/loongson/Platform	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/arch/mips/loongson/Platform	2014-09-21 00:41:01.442001610 +0800
 @@ -30,4 +30,5 @@ platform-$(CONFIG_MACH_LOONGSON) += loon
  cflags-$(CONFIG_MACH_LOONGSON) += -I$(srctree)/arch/mips/include/asm/mach-loongson -mno-branch-likely
  load-$(CONFIG_LEMOTE_FULOONG2E) += 0xffffffff80100000
  load-$(CONFIG_LEMOTE_MACH2F) += 0xffffffff80200000
 +load-$(CONFIG_DEXXON_GDIUM) += 0xffffffff80200000
  load-$(CONFIG_CPU_LOONGSON3) += 0xffffffff80200000
-diff -uprN linux-3.15/drivers/platform/Kconfig linux-3.15-loongson/drivers/platform/Kconfig
---- linux-3.15/drivers/platform/Kconfig	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/Kconfig	2014-07-03 06:16:39.506759880 +0800
+diff -uprN linux-3.15.orig/drivers/platform/Kconfig linux-3.15/drivers/platform/Kconfig
+--- linux-3.15.orig/drivers/platform/Kconfig	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/drivers/platform/Kconfig	2014-09-21 00:41:01.442001610 +0800
 @@ -4,5 +4,8 @@ endif
  if GOLDFISH
  source "drivers/platform/goldfish/Kconfig"
@@ -1368,9 +1368,9 @@ diff -uprN linux-3.15/drivers/platform/Kconfig linux-3.15-loongson/drivers/platf
 +endif
  
  source "drivers/platform/chrome/Kconfig"
-diff -uprN linux-3.15/drivers/platform/Makefile linux-3.15-loongson/drivers/platform/Makefile
---- linux-3.15/drivers/platform/Makefile	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/Makefile	2014-07-03 06:16:59.979488035 +0800
+diff -uprN linux-3.15.orig/drivers/platform/Makefile linux-3.15/drivers/platform/Makefile
+--- linux-3.15.orig/drivers/platform/Makefile	2014-06-09 02:19:54.000000000 +0800
++++ linux-3.15/drivers/platform/Makefile	2014-09-21 00:41:01.442001610 +0800
 @@ -3,6 +3,7 @@
  #
  
@@ -1379,9 +1379,9 @@ diff -uprN linux-3.15/drivers/platform/Makefile linux-3.15-loongson/drivers/plat
  obj-$(CONFIG_OLPC)		+= olpc/
  obj-$(CONFIG_GOLDFISH)		+= goldfish/
  obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
-diff -uprN linux-3.15/drivers/platform/mips/gdium_laptop.c linux-3.15-loongson/drivers/platform/mips/gdium_laptop.c
---- linux-3.15/drivers/platform/mips/gdium_laptop.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/gdium_laptop.c	2014-07-03 06:09:51.000000000 +0800
+diff -uprN linux-3.15.orig/drivers/platform/mips/gdium_laptop.c linux-3.15/drivers/platform/mips/gdium_laptop.c
+--- linux-3.15.orig/drivers/platform/mips/gdium_laptop.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/gdium_laptop.c	2014-09-21 00:41:01.443001639 +0800
 @@ -0,0 +1,927 @@
 +/*
 + * gdium_laptop  --  Gdium laptop extras
@@ -2310,9 +2310,9 @@ diff -uprN linux-3.15/drivers/platform/mips/gdium_laptop.c linux-3.15-loongson/d
 +MODULE_AUTHOR("Arnaud Patard <apatard@mandriva.com>");
 +MODULE_DESCRIPTION("Gdium laptop extras");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.15/drivers/platform/mips/Kconfig linux-3.15-loongson/drivers/platform/mips/Kconfig
---- linux-3.15/drivers/platform/mips/Kconfig	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/Kconfig	2014-07-03 06:09:51.000000000 +0800
+diff -uprN linux-3.15.orig/drivers/platform/mips/Kconfig linux-3.15/drivers/platform/mips/Kconfig
+--- linux-3.15.orig/drivers/platform/mips/Kconfig	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/Kconfig	2014-09-21 00:41:01.443001639 +0800
 @@ -0,0 +1,60 @@
 +#
 +# MIPS Platform Specific Drivers
@@ -2374,9 +2374,9 @@ diff -uprN linux-3.15/drivers/platform/mips/Kconfig linux-3.15-loongson/drivers/
 +	  This gives battery support, wlan rfkill.
 +
 +endif # MIPS_PLATFORM_DEVICES
-diff -uprN linux-3.15/drivers/platform/mips/lynloong_pc.c linux-3.15-loongson/drivers/platform/mips/lynloong_pc.c
---- linux-3.15/drivers/platform/mips/lynloong_pc.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/lynloong_pc.c	2014-07-03 06:09:51.000000000 +0800
+diff -uprN linux-3.15.orig/drivers/platform/mips/lynloong_pc.c linux-3.15/drivers/platform/mips/lynloong_pc.c
+--- linux-3.15.orig/drivers/platform/mips/lynloong_pc.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/lynloong_pc.c	2014-09-21 00:41:01.443001639 +0800
 @@ -0,0 +1,515 @@
 +/*
 + * Driver for LynLoong PC extras
@@ -2893,9 +2893,9 @@ diff -uprN linux-3.15/drivers/platform/mips/lynloong_pc.c linux-3.15-loongson/dr
 +MODULE_AUTHOR("Wu Zhangjin <wuzhangjin@gmail.com>; Xiang Yu <xiangy@lemote.com>");
 +MODULE_DESCRIPTION("LynLoong PC driver");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.15/drivers/platform/mips/Makefile linux-3.15-loongson/drivers/platform/mips/Makefile
---- linux-3.15/drivers/platform/mips/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/Makefile	2014-07-03 06:09:51.000000000 +0800
+diff -uprN linux-3.15.orig/drivers/platform/mips/Makefile linux-3.15/drivers/platform/mips/Makefile
+--- linux-3.15.orig/drivers/platform/mips/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/Makefile	2014-09-21 00:41:01.444001669 +0800
 @@ -0,0 +1,9 @@
 +#
 +# Makefile for MIPS Platform-Specific Drivers
@@ -2906,9 +2906,9 @@ diff -uprN linux-3.15/drivers/platform/mips/Makefile linux-3.15-loongson/drivers
 +
 +obj-$(CONFIG_LEMOTE_LYNLOONG2F)	+= lynloong_pc.o
 +obj-$(CONFIG_GDIUM_LAPTOP)	+= gdium_laptop.o
-diff -uprN linux-3.15/drivers/platform/mips/yeeloong_ecrom.c linux-3.15-loongson/drivers/platform/mips/yeeloong_ecrom.c
---- linux-3.15/drivers/platform/mips/yeeloong_ecrom.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/yeeloong_ecrom.c	2014-07-03 06:09:51.000000000 +0800
+diff -uprN linux-3.15.orig/drivers/platform/mips/yeeloong_ecrom.c linux-3.15/drivers/platform/mips/yeeloong_ecrom.c
+--- linux-3.15.orig/drivers/platform/mips/yeeloong_ecrom.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/yeeloong_ecrom.c	2014-09-21 00:41:01.444001669 +0800
 @@ -0,0 +1,944 @@
 +/*
 + * Driver for flushing/dumping ROM of EC on YeeLoong laptop
@@ -3854,10 +3854,10 @@ diff -uprN linux-3.15/drivers/platform/mips/yeeloong_ecrom.c linux-3.15-loongson
 +MODULE_AUTHOR("liujl <liujl@lemote.com>");
 +MODULE_DESCRIPTION("Driver for flushing/dumping ROM of EC on YeeLoong laptop");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-loongson/drivers/platform/mips/yeeloong_laptop.c
---- linux-3.15/drivers/platform/mips/yeeloong_laptop.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15-loongson/drivers/platform/mips/yeeloong_laptop.c	2014-07-03 06:09:51.000000000 +0800
-@@ -0,0 +1,1354 @@
+diff -uprN linux-3.15.orig/drivers/platform/mips/yeeloong_laptop.c linux-3.15/drivers/platform/mips/yeeloong_laptop.c
+--- linux-3.15.orig/drivers/platform/mips/yeeloong_laptop.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.15/drivers/platform/mips/yeeloong_laptop.c	2014-09-21 00:41:17.634479682 +0800
+@@ -0,0 +1,1360 @@
 +/*
 + * Driver for YeeLoong laptop extras
 + *
@@ -4028,7 +4028,7 @@ diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-loongso
 +
 +static int get_bat_temp(void)
 +{
-+	return get_bat_l(TEMPERATURE) * 1000;
++	return get_bat_l(TEMPERATURE) * 10;
 +}
 +
 +static int get_bat_current(void)
@@ -4834,11 +4834,12 @@ diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-loongso
 +	[EVENT_DISPLAY_TOGGLE] = {0, switchvideomode_handler},
 +	[EVENT_USB_OC0] = {REG_USB2_FLAG, usb0_handler},
 +	[EVENT_USB_OC2] = {REG_USB2_FLAG, usb2_handler},
++	[EVENT_WLAN] = {REG_WLAN, NULL},
 +};
 +
 +static void do_event_action(int event)
 +{
-+	int status;
++	int status = -1;
 +	struct key_entry *ke;
 +	struct sci_event *sep;
 +
@@ -4846,6 +4847,11 @@ diff -uprN linux-3.15/drivers/platform/mips/yeeloong_laptop.c linux-3.15-loongso
 +
 +	if (sep->reg != 0)
 +		status = ec_read(sep->reg);
++
++	if (status == -1) {
++		/* ec_read hasn't been called, status is invalid */
++		return;
++	}
 +
 +	if (sep->handler != NULL)
 +		status = sep->handler(status);
