@@ -1,6 +1,6 @@
 README
 --------------------------------------------------------------------------
-This patchset is to be the 2.6 series of gentoo-sources.
+This patchset is to be the series of patches for gentoo-sources.
 It is designed for cross-compatibility, fixes and stability, with performance
 and additional features/driver support being a second.
 
@@ -42,50 +42,17 @@ EXPERIMENTAL
 
 Individual Patch Descriptions:
 --------------------------------------------------------------------------
-
-Patch:  1000_linux-3.15.1.patch
+Patch:  1000_linux-3.16.1.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.15.1
+Desc:   Linux 3.16.1
 
-Patch:  1001_linux-3.15.2.patch
+Patch:  1001_linux-3.16.2.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.15.2
+Desc:   Linux 3.16.2
 
-Patch:  1002_linux-3.15.3.patch
+Patch:  1002_linux-3.16.3.patch
 From:   http://www.kernel.org
-Desc:   Linux 3.15.3
-
-Patch:  1003_linux-3.15.4.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.4
-
-Patch:  1004_linux-3.15.5.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.5
-
-Patch:  1005_linux-3.15.6.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.6
-
-Patch:  1006_linux-3.15.7.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.7
-
-Patch:  1007_linux-3.15.8.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.8
-
-Patch:  1008_linux-3.15.9.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.9
-
-Patch:  1009_linux-3.15.10.patch
-From:   http://www.kernel.org
-Desc:   Linux 3.15.10
-
-Patch:  1700_enable-thinkpad-micled.patch
-From:   https://bugs.gentoo.org/show_bug.cgi?id=449248
-Desc:   Enable mic mute led in thinkpads
+Desc:   Linux 3.16.3
 
 Patch:  2400_kcopy-patch-for-infiniband-driver.patch
 From:   Alexey Shvetsov <alexxy@gentoo.org>
@@ -119,14 +86,14 @@ Patch:  5000_enable-additional-cpu-optimizations-for-gcc.patch
 From:   https://github.com/graysky2/kernel_gcc_patch/
 Desc:   Kernel patch enables gcc optimizations for additional CPUs.
 
-Patch:  5001_BFQ-1-block-cgroups-kconfig-build-bits-for-v7r4-3.15.patch
+Patch:  5001_BFQ-1-block-cgroups-kconfig-build-bits-for-v7r5-3.16.patch
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
-Desc:   BFQ v7r2 patch 1 for 3.14: Build, cgroups and kconfig bits
+Desc:   BFQ v7r5 patch 1 for 3.16: Build, cgroups and kconfig bits
 
-Patch:  5002_BFQ-2-block-introduce-the-v7r4-I-O-sched-for-3.15.patch1
+Patch:  5002_BFQ-2-block-introduce-the-v7r5-I-O-sched-for-3.16.patch1
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
-Desc:   BFQ v7r2 patch 2 for 3.14: BFQ Scheduler
+Desc:   BFQ v7r5 patch 2 for 3.16: BFQ Scheduler
 
-Patch:  5003_BFQ-3-block-add-Early-Queue-Merge-EQM-v7r4-for-3.15.0.patch
+Patch:  5003_BFQ-3-block-add-Early-Queue-Merge-EQM-v7r5-for-3.16.0.patch
 From:   http://algo.ing.unimo.it/people/paolo/disk_sched/
-Desc:   BFQ v7r2 patch 3 for 3.14: Early Queue Merge (EQM)
+Desc:   BFQ v7r5 patch 3 for 3.16: Early Queue Merge (EQM)

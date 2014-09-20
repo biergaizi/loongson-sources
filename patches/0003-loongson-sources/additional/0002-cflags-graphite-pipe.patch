@@ -1,13 +1,16 @@
-diff -rupN linux-3.15-orig/Makefile linux-3.15-new/Makefile
---- linux-3.15-orig/Makefile	2014-07-03 05:54:19.662112107 +0800
-+++ linux-3.15-new/Makefile	2014-07-03 05:55:13.542027915 +0800
-@@ -396,6 +396,9 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstric
+diff -uprN linux-3.16.orig/Makefile linux-3.16/Makefile
+--- linux-3.16.orig/Makefile	2014-08-28 10:10:36.036877309 +0800
++++ linux-3.16/Makefile	2014-08-28 10:27:36.987301676 +0800
+@@ -406,7 +406,11 @@ KBUILD_CPPFLAGS := -D__KERNEL__
+ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  		   -fno-strict-aliasing -fno-common \
  		   -Werror-implicit-function-declaration \
- 		   -Wno-format-security \
-+		   -ftree-vectorize -pipe \
+-		   -Wno-format-security
++		   -Wno-format-security \
++		   -pipe \
++		   -ftree-vectorize \
 +		   -floop-interchange -ftree-loop-distribution \
-+		   -floop-strip-mine -floop-block \
- 		   $(call cc-option,-fno-delete-null-pointer-checks,)
++		   -floop-strip-mine -floop-block
+ 
  KBUILD_AFLAGS_KERNEL :=
  KBUILD_CFLAGS_KERNEL :=

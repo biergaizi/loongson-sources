@@ -1,7 +1,7 @@
-diff -uprN linux-3.15.orig/drivers/video/fbdev/Kconfig linux-3.15/drivers/video/fbdev/Kconfig
---- linux-3.15.orig/drivers/video/fbdev/Kconfig	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/Kconfig	2014-09-21 00:33:21.484549244 +0800
-@@ -2441,6 +2441,19 @@ config FB_SIMPLE
+diff -uprN linux-3.16.orig/drivers/video/fbdev/Kconfig linux-3.16/drivers/video/fbdev/Kconfig
+--- linux-3.16.orig/drivers/video/fbdev/Kconfig	2014-08-04 06:25:02.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/Kconfig	2014-09-21 01:13:33.642141495 +0800
+@@ -2446,6 +2446,19 @@ config FB_SIMPLE
  	  Configuration re: surface address, size, and format must be provided
  	  through device tree, or plain old platform data.
  
@@ -21,9 +21,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/Kconfig linux-3.15/drivers/video/
  source "drivers/video/fbdev/omap/Kconfig"
  source "drivers/video/fbdev/omap2/Kconfig"
  source "drivers/video/fbdev/exynos/Kconfig"
-diff -uprN linux-3.15.orig/drivers/video/fbdev/Makefile linux-3.15/drivers/video/fbdev/Makefile
---- linux-3.15.orig/drivers/video/fbdev/Makefile	2014-06-09 02:19:54.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/Makefile	2014-09-21 00:33:21.484549244 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/Makefile linux-3.16/drivers/video/fbdev/Makefile
+--- linux-3.16.orig/drivers/video/fbdev/Makefile	2014-08-04 06:25:02.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/Makefile	2014-09-21 01:13:33.642141495 +0800
 @@ -112,6 +112,7 @@ obj-$(CONFIG_FB_COBALT)           += cob
  obj-$(CONFIG_FB_IBM_GXT4500)	  += gxt4500.o
  obj-$(CONFIG_FB_PS3)		  += ps3fb.o
@@ -32,15 +32,16 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/Makefile linux-3.15/drivers/video
  obj-$(CONFIG_FB_UDL)		  += udlfb.o
  obj-$(CONFIG_FB_SMSCUFX)	  += smscufx.o
  obj-$(CONFIG_FB_XILINX)           += xilinxfb.o
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/Makefile linux-3.15/drivers/video/fbdev/sm712fb/Makefile
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/Makefile	2014-09-21 00:33:50.148377971 +0800
-@@ -0,0 +1,2 @@
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/Makefile linux-3.16/drivers/video/fbdev/sm712fb/Makefile
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/Makefile	2014-09-21 01:14:31.499177076 +0800
+@@ -0,0 +1,3 @@
 +obj-$(CONFIG_FB_SM712) += sm712fb.o
++
 +sm712fb-objs := sm712fb_drv.o sm712fb_accel.o
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.c linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_accel.c
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_accel.c	2014-09-21 00:33:21.485549272 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.c linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_accel.c
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_accel.c	2014-09-21 01:13:33.642141495 +0800
 @@ -0,0 +1,246 @@
 +/*
 + * Silicon Motion SM712 frame buffer device
@@ -288,9 +289,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.c linux-3.1
 +	sm712_read_dpr(sfb, DPR_DE_CTRL);
 +	sm712fb_wait(sfb);
 +}
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.h linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_accel.h
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_accel.h	2014-09-21 00:33:21.485549272 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.h linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_accel.h
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_accel.h	2014-09-21 01:13:33.643141530 +0800
 @@ -0,0 +1,33 @@
 +/*
 + * Silicon Motion SM712 frame buffer device
@@ -325,9 +326,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_accel.h linux-3.1
 +void sm712fb_imageblit(struct fb_info *info, const struct fb_image *image);
 +
 +#endif
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.c linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_drv.c
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.c	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_drv.c	2014-09-21 00:33:21.485549272 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.c linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_drv.c
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.c	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_drv.c	2014-09-21 01:13:33.643141530 +0800
 @@ -0,0 +1,1022 @@
 +/*
 + * Silicon Motion SM712 frame buffer device
@@ -1351,9 +1352,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.c linux-3.15/
 +MODULE_AUTHOR("Siliconmotion ");
 +MODULE_DESCRIPTION("Framebuffer driver for Silicon Motion SM712 Graphic Cards");
 +MODULE_LICENSE("GPL");
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.h linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_drv.h
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_drv.h	2014-09-21 00:33:21.485549272 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.h linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_drv.h
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_drv.h	2014-09-21 01:13:33.643141530 +0800
 @@ -0,0 +1,130 @@
 +/*
 + * Silicon Motion SM712 frame buffer device
@@ -1485,9 +1486,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_drv.h linux-3.15/
 +#define DAC_VAL	(0x3c9)
 +
 +#endif
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_io.h linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_io.h
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_io.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_io.h	2014-09-21 00:33:21.486549301 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_io.h linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_io.h
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_io.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_io.h	2014-09-21 01:13:33.643141530 +0800
 @@ -0,0 +1,90 @@
 +/*
 + * Silicon Motion SM712 frame buffer device
@@ -1579,9 +1580,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_io.h linux-3.15/d
 +{
 +	sm712_writel(fb->dataport, 0, val);
 +}
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_modedb.h linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_modedb.h
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_modedb.h	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/sm712fb_modedb.h	2014-09-21 00:33:21.486549301 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_modedb.h linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_modedb.h
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/sm712fb_modedb.h	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/sm712fb_modedb.h	2014-09-21 01:13:33.644141565 +0800
 @@ -0,0 +1,682 @@
 +/* The next structure holds all information relevant for a specific video mode.
 + */
@@ -2265,9 +2266,9 @@ diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/sm712fb_modedb.h linux-3.
 +};
 +
 +#define numVGAModes		ARRAY_SIZE(VGAMode)
-diff -uprN linux-3.15.orig/drivers/video/fbdev/sm712fb/TODO linux-3.15/drivers/video/fbdev/sm712fb/TODO
---- linux-3.15.orig/drivers/video/fbdev/sm712fb/TODO	1970-01-01 08:00:00.000000000 +0800
-+++ linux-3.15/drivers/video/fbdev/sm712fb/TODO	2014-09-21 00:33:21.486549301 +0800
+diff -uprN linux-3.16.orig/drivers/video/fbdev/sm712fb/TODO linux-3.16/drivers/video/fbdev/sm712fb/TODO
+--- linux-3.16.orig/drivers/video/fbdev/sm712fb/TODO	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.16/drivers/video/fbdev/sm712fb/TODO	2014-09-21 01:13:33.642141495 +0800
 @@ -0,0 +1,7 @@
 +TODO:
 +- Dual head support

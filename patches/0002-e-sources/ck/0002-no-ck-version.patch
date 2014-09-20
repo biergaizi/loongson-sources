@@ -1,0 +1,11 @@
+--- a/Makefile	2014-09-21 01:27:33.125297770 +0800
++++ b/Makefile	2014-09-21 01:37:13.431309282 +0800
+@@ -12,7 +12,7 @@ NAME = Museum of Fishiegoodies
+ 
+ CKVERSION = -ck2
+ CKNAME = BFS Powered
+-EXTRAVERSION := $(EXTRAVERSION)$(CKVERSION)
++EXTRAVERSION := $(EXTRAVERSION)
+ 
+ # Do not:
+ # o  use make's built-in rules and variables
