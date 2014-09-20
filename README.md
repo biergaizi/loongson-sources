@@ -20,7 +20,7 @@ Features
 Binary
 ----------
 
-The latest binary kernel and GPG siguature can be found at the root of the repo. The naming format is:
+We use [GitHub Release](https://github.com/biergaizi/loongson-sources/releases) to publish the latest binary kernel and GPG siguature. The naming format is:
 
 	linux-[kernel version]-yeeloong-gaizi.tar.xz
 	linux-[kernel version]-yeeloong-gaizi.tar.xz.sig
