@@ -6,7 +6,7 @@ loongson-sources is a patchset against offical upstream Linux kernel for YeeLoon
 Features
 ----------
 * genpatches
-* <del>BFS</del> (disabled for now because of random hang)
+* BFS
 * BFQ
 * CJKtty
 * UKSM
