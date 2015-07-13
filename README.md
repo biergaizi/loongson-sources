@@ -43,4 +43,4 @@ Build from Source
 
 * make (you should setup the cross-toolchains correctly)
 
-* You're down. You can use the `./patches/packaging.sh` to generate a tarball if you want.
+* You're done. You can use the `./patches/packaging.sh` to generate a tarball if you want.
