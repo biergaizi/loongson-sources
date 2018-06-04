@@ -1,6 +1,6 @@
 #DeleteGithub
 ====================
-This project is moved to [notabug.org](https://notabug.org/niconiconi/loongson-sources), welcome to join the free world!
+**Deleted!** This project is moved to [notabug.org](https://notabug.org/niconiconi/loongson-sources), welcome to join the free world!
 
 loongson-sources is a patchset against offical upstream Linux kernel for YeeLoong 8089D with Loongson 2F processor.
 
